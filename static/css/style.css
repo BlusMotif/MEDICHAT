@@ -1,0 +1,153 @@
+/* Custom styling for the doctor chatbot */
+
+/* Chat container adjustments */
+#chatMessages {
+    scroll-behavior: smooth;
+}
+
+/* Message bubbles */
+.message {
+    max-width: 80%;
+    margin-bottom: 15px;
+    border-radius: 1rem;
+    padding: 10px 15px;
+    position: relative;
+    line-height: 1.5;
+}
+
+.message p {
+    margin-bottom: 0.5rem;
+}
+
+.message p:last-child {
+    margin-bottom: 0;
+}
+
+/* User message styling */
+.user-message {
+    background-color: var(--bs-primary);
+    color: white;
+    border-top-right-radius: 0.2rem;
+    margin-left: auto;
+    text-align: right;
+}
+
+/* Bot message styling */
+.bot-message {
+    background-color: var(--bs-secondary-bg);
+    border-top-left-radius: 0.2rem;
+}
+
+/* Time stamp styling */
+.message .timestamp {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Typing indicator styling */
+.typing-indicator {
+    position: absolute;
+    bottom: 85px;
+    left: 25px;
+    display: flex;
+    align-items: center;
+    background-color: var(--bs-secondary-bg);
+    padding: 10px 15px;
+    border-radius: 1rem;
+    border-top-left-radius: 0.2rem;
+}
+
+.typing-bubble {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: rgba(var(--bs-secondary-rgb), 0.7);
+    margin-right: 5px;
+    animation: typing 1s infinite ease-in-out;
+}
+
+.typing-bubble:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-bubble:nth-child(3) {
+    animation-delay: 0.4s;
+    margin-right: 0;
+}
+
+@keyframes typing {
+    0% {
+        transform: translateY(0px);
+        background-color: rgba(var(--bs-secondary-rgb), 0.7);
+    }
+    50% {
+        transform: translateY(-5px);
+        background-color: rgba(var(--bs-secondary-rgb), 1);
+    }
+    100% {
+        transform: translateY(0px);
+        background-color: rgba(var(--bs-secondary-rgb), 0.7);
+    }
+}
+
+/* Markdown-like styling for bot messages */
+.bot-message ul {
+    padding-left: 20px;
+}
+
+.bot-message li {
+    margin-bottom: 5px;
+}
+
+.bot-message strong, .bot-message b {
+    color: var(--bs-primary);
+}
+
+/* Quick symptom buttons */
+.quick-symptom {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    margin-top: 0.25rem;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bs-body-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--bs-secondary);
+    border-radius: 10px;
+    border: 3px solid var(--bs-body-bg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bs-primary);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 576px) {
+    .message {
+        max-width: 90%;
+    }
+    
+    .typing-indicator {
+        bottom: 110px;
+    }
+}
+
+/* Animation for new messages */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message {
+    animation: fadeIn 0.3s ease-out forwards;
+}

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Chatbot</title>
+    
+    <!-- Bootstrap CSS from Replit theme -->
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container-fluid vh-100 d-flex flex-column">
+        <!-- Header -->
+        <header class="row py-3 border-bottom">
+            <div class="col-12 d-flex align-items-center">
+                <i class="fas fa-user-md text-primary fs-3 me-2"></i>
+                <h1 class="h4 mb-0">Dr. Bot</h1>
+                <div class="ms-auto d-flex align-items-center">
+                    <span class="badge bg-success me-2">Online</span>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="menuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="menuButton">
+                            <li><button class="dropdown-item" id="resetChat">New Conversation</button></li>
+                            <li><button class="dropdown-item" id="toggleDarkMode">Toggle Theme</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#disclaimerModal">Medical Disclaimer</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main chat area -->
+        <main class="row flex-grow-1 overflow-hidden">
+            <div class="col-12 h-100 d-flex flex-column">
+                <!-- Chat messages area -->
+                <div id="chatMessages" class="flex-grow-1 p-3 overflow-auto">
+                    <div class="d-flex justify-content-center my-4">
+                        <div class="alert alert-info text-center">
+                            <i class="fas fa-info-circle me-2"></i>
+                            This chatbot provides general information only and is not a substitute for professional medical advice.
+                        </div>
+                    </div>
+                    <!-- Messages will be added here by JavaScript -->
+                </div>
+                
+                <!-- Input area -->
+                <div id="chatInputArea" class="p-3 border-top">
+                    <form id="messageForm" class="d-flex">
+                        <input type="text" id="userInput" class="form-control me-2" placeholder="Describe your symptoms..." autocomplete="off">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <div class="mt-2">
+                        <div class="d-flex flex-wrap gap-1">
+                            <button class="btn btn-sm btn-outline-secondary quick-symptom">Headache</button>
+                            <button class="btn btn-sm btn-outline-secondary quick-symptom">Fever</button>
+                            <button class="btn btn-sm btn-outline-secondary quick-symptom">Cough</button>
+                            <button class="btn btn-sm btn-outline-secondary quick-symptom">Sore Throat</button>
+                            <button class="btn btn-sm btn-outline-secondary quick-symptom">Fatigue</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Typing indicator -->
+        <div id="typingIndicator" class="typing-indicator d-none">
+            <div class="typing-bubble"></div>
+            <div class="typing-bubble"></div>
+            <div class="typing-bubble"></div>
+        </div>
+    </div>
+    
+    <!-- Medical Disclaimer Modal -->
+    <div class="modal fade" id="disclaimerModal" tabindex="-1" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="disclaimerModalLabel">Medical Disclaimer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="fw-bold">Not Professional Medical Advice</p>
+                    <p>The information provided by this chatbot is for general informational and educational purposes only. It is not intended to be a substitute for professional medical advice, diagnosis, or treatment.</p>
+                    
+                    <p class="fw-bold">Consult Healthcare Professionals</p>
+                    <p>Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read or heard from this chatbot.</p>
+                    
+                    <p class="fw-bold">Emergency Situations</p>
+                    <p>If you think you may have a medical emergency, call your doctor or emergency services immediately.</p>
+                    
+                    <p class="fw-bold">No Doctor-Patient Relationship</p>
+                    <p>Use of this chatbot does not establish a doctor-patient relationship.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">I Understand</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Welcome Modal -->
+    <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="welcomeModalLabel">Welcome to Dr. Bot</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Dr. Bot is an AI-powered chatbot designed to help you understand potential causes for your symptoms.</p>
+                    
+                    <p class="fw-bold">How to use Dr. Bot:</p>
+                    <ol>
+                        <li>Describe your symptoms in detail</li>
+                        <li>Answer follow-up questions to provide more context</li>
+                        <li>Receive potential causes and self-care recommendations</li>
+                    </ol>
+                    
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Important: This is not a replacement for professional medical advice. Always consult with a healthcare professional for proper diagnosis and treatment.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>
