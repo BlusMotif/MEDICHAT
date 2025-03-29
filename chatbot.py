@@ -51,9 +51,9 @@ class DoctorChatbot:
         
         # Greeting messages
         self.greetings = [
-            "Hello! I'm Medi Chat, a virtual assistant that can help identify potential health issues based on your symptoms. Please share at least 3 symptoms for an accurate diagnosis.",
-            "Hi there! I'm Medi Chat, your virtual medical assistant. To provide a helpful assessment, I'll need you to describe at least 3 symptoms you're experiencing.",
-            "Welcome! I'm Medi Chat, here to assist with preliminary medical advice. For an accurate assessment, please share at least 3 symptoms you're having today."
+            "Hello! I'm Medi Chat, a virtual assistant that can help identify potential health issues based on your symptoms. I need at least 3 symptoms to provide an accurate diagnosis, so please share all symptoms you're experiencing.",
+            "Hi there! I'm Medi Chat, your virtual medical assistant. I require a minimum of 3 symptoms to give you an accurate assessment. Please describe at least 3 symptoms you're experiencing in detail.",
+            "Welcome! I'm Medi Chat, here to assist with preliminary medical advice. For an accurate assessment, I need you to share at least 3 symptoms you're having today. Please provide as much detail as possible."
         ]
         
         # Follow-up questions
@@ -319,7 +319,7 @@ class DoctorChatbot:
                 else:
                     remaining = 3 - symptom_count
                     remaining_text = f"I need {remaining} more {('symptom' if remaining == 1 else 'symptoms')} to provide an accurate diagnosis. " if remaining > 0 else ""
-                    return f"I see you're experiencing {symptoms_text}. {remaining_text}{follow_up} Please mention any other symptoms you're experiencing."
+                    return f"I see you're experiencing {symptoms_text}. {remaining_text}{follow_up} Please mention at least {remaining} more specific symptoms you're experiencing to get an accurate diagnosis."
             
             # Check if user wants a diagnosis with the symptoms collected so far
             if re.search(r'\b(diagnose|diagnosis|what do i have|what is it)\b', user_input.lower()):
@@ -330,7 +330,7 @@ class DoctorChatbot:
                 else:
                     remaining = 3 - symptom_count
                     symptom_word = "symptoms" if remaining > 1 else "symptom"
-                    return f"I need at least 3 symptoms to provide an accurate diagnosis. Please share {remaining} more {symptom_word} you're experiencing."
+                    return f"I need at least 3 symptoms to provide an accurate diagnosis. You've only shared {symptom_count} symptom(s) so far. Please share {remaining} more {symptom_word} you're experiencing before I can give you a proper assessment."
             
             # No symptoms detected in the response
             return "I didn't recognize specific symptoms in your message. Could you please mention your symptoms more clearly? For example: headache, fever, cough, etc."
@@ -351,7 +351,7 @@ class DoctorChatbot:
                     # If symptoms have been removed or we somehow have fewer than 3
                     self.conversation_state["stage"] = "collecting_symptoms"
                     remaining = 3 - symptom_count
-                    return f"I've added these additional symptoms: {symptoms_text}. I need at least {remaining} more symptom(s) to provide an accurate diagnosis. Please share any other symptoms you're experiencing."
+                    return f"I've added these additional symptoms: {symptoms_text}. However, you now have only {symptom_count} confirmed symptom(s). I need at least {remaining} more symptom(s) to provide an accurate diagnosis. Please share more specific symptoms you're experiencing."
             
             # Check if user is asking for more information or clarification
             if re.search(r'\b(more info|more information|tell me more|additional info|explain|clarify)\b', user_input.lower()):
