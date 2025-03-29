@@ -11,6 +11,49 @@
     height: 40px;
 }
 
+/* Improved text visibility */
+.text-white-75 {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.text-emphasis {
+    font-weight: 500;
+    color: var(--bs-emphasis-color);
+}
+
+/* Ensure dark theme has good contrast */
+[data-bs-theme="dark"] .text-dark {
+    color: #f8f9fa !important;
+}
+
+[data-bs-theme="dark"] .bg-secondary.bg-opacity-10 {
+    background-color: rgba(173, 181, 189, 0.2) !important;
+}
+
+[data-bs-theme="dark"] .text-emphasis {
+    color: #fff !important;
+}
+
+[data-bs-theme="dark"] .modal-content {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .alert-info {
+    color: #cff4fc;
+    background-color: rgba(13, 202, 240, 0.2);
+    border-color: rgba(13, 202, 240, 0.3);
+}
+
+/* Higher contrast for light mode */
+[data-bs-theme="light"] .text-dark {
+    color: #000 !important;
+}
+
+[data-bs-theme="light"] .bg-secondary.bg-opacity-10 {
+    background-color: rgba(173, 181, 189, 0.3) !important;
+    border: 1px solid rgba(173, 181, 189, 0.5);
+}
+
 /* Chat messages area */
 #chatMessages {
     scrollbar-width: thin;
@@ -42,6 +85,29 @@
 .message-content {
     max-width: 600px;
     word-wrap: break-word;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Better contrast for message bubbles */
+[data-bs-theme="dark"] .user-message .message-content {
+    background-color: #0d6efd !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-bs-theme="dark"] .bot-message .message-content {
+    background-color: #2b3035 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f8f9fa;
+}
+
+[data-bs-theme="light"] .bot-message .message-content {
+    background-color: #e9ecef !important;
+    border: 1px solid #ced4da;
+}
+
+[data-bs-theme="light"] .user-message .message-content {
+    background-color: #0d6efd !important;
+    border: 1px solid rgba(13, 110, 253, 0.2);
 }
 
 /* Typing indicator */
@@ -87,6 +153,24 @@
 /* Quick symptom buttons */
 .quick-symptom {
     white-space: nowrap;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.quick-symptom:hover {
+    transform: translateY(-1px);
+}
+
+[data-bs-theme="dark"] .quick-symptom {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #f8f9fa;
+}
+
+[data-bs-theme="light"] .quick-symptom {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #212529;
 }
 
 /* Responsive adjustments */

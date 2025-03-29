@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="d-flex align-items-start justify-content-end">
                     <div class="message-content bg-primary text-white p-3 rounded-3">
                         <div class="message-text">${message}</div>
-                        <div class="message-time text-end opacity-75 small">${time}</div>
+                        <div class="message-time text-end text-white-75 small">${time}</div>
                     </div>
                     <div class="message-avatar ms-2">
                         <div class="avatar bg-light rounded-circle d-flex align-items-center justify-content-center">
@@ -101,9 +101,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             <i class="fas fa-user-md text-white"></i>
                         </div>
                     </div>
-                    <div class="message-content bg-light p-3 rounded-3">
+                    <div class="message-content bg-secondary bg-opacity-10 text-dark p-3 rounded-3">
                         <div class="message-text">${formatBotMessage(message)}</div>
-                        <div class="message-time opacity-75 small">${time}</div>
+                        <div class="message-time text-dark opacity-75 small">${time}</div>
                     </div>
                 </div>
             `;
