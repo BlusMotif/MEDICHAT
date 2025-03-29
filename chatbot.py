@@ -201,20 +201,35 @@ class DoctorChatbot:
                 for condition in conditions:
                     potential_conditions[condition] = potential_conditions.get(condition, 0) + 1
         
-        # Sort conditions by frequency
+        # Sort conditions by frequency and strength of match
         sorted_conditions = sorted(potential_conditions.items(), key=lambda x: x[1], reverse=True)
         
         if not sorted_conditions:
             return "Based on the symptoms you've described, I don't have enough information to suggest a potential cause. Please consult with a healthcare professional."
         
-        # Get top 3 conditions from local database
-        top_conditions = sorted_conditions[:3]
+        # Get top 2 conditions from local database (limit to 2 as requested)
+        top_conditions = sorted_conditions[:2]
+        
+        # Calculate match confidence
+        max_score = len(self.conversation_state["confirmed_symptoms"])
         
         # Generate diagnosis response
-        response = "Based on the symptoms you've described, here are some possible conditions to consider:\n\n"
+        response = "Based on the symptoms you've described, here are the most likely conditions:\n\n"
         
-        for condition, _ in top_conditions:
-            response += f"• {condition}\n"
+        # Display the conditions with their match strength
+        for condition, match_count in top_conditions:
+            # Calculate confidence percentage based on match count vs total symptoms
+            confidence = int((match_count / max_score) * 100) if max_score > 0 else 0
+            
+            # Add confidence indicator based on percentage
+            if confidence >= 75:
+                confidence_level = "High match"
+            elif confidence >= 50:
+                confidence_level = "Moderate match"
+            else:
+                confidence_level = "Possible match"
+            
+            response += f"• **{condition}** - {confidence_level}\n"
             
             # Check if treatment info is available in the diseases dictionary (from African diseases text)
             if "diseases" in self.medical_data and condition in self.medical_data["diseases"]:
@@ -235,11 +250,15 @@ class DoctorChatbot:
             symptom_list = list(self.conversation_state["confirmed_symptoms"])
             external_data = self.medical_api.search_medical_condition(symptom_list)
             
-            if external_data and external_data.get("conditions"):
+            # Only show external conditions if we don't already have 2 from our local database
+            if len(top_conditions) < 2 and external_data and external_data.get("conditions"):
                 response += "\nAdditional information from medical references:\n\n"
                 
-                for condition_info in external_data["conditions"]:
-                    response += f"• {condition_info['name']}\n"
+                # Only get enough conditions to bring our total to 2
+                remaining_slots = 2 - len(top_conditions)
+                for condition_info in external_data["conditions"][:remaining_slots]:
+                    # External sources typically have less confidence since they aren't tailored to African diseases
+                    response += f"• **{condition_info['name']}** - Possible match\n"
                     if condition_info.get('description'):
                         response += f"  {condition_info['description']}\n"
                     if condition_info.get('source'):
