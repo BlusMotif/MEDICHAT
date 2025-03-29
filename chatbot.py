@@ -303,19 +303,25 @@ class DoctorChatbot:
                 symptoms_text = ", ".join(extracted_symptoms)
                 follow_up = self.get_follow_up_question()
                 
-                if len(self.conversation_state["confirmed_symptoms"]) >= 3:
+                symptom_count = len(self.conversation_state["confirmed_symptoms"])
+                if symptom_count >= 3:
                     self.conversation_state["stage"] = "diagnosis"
-                    return f"I've identified these symptoms: {symptoms_text}. {follow_up} Or if you feel I have enough information, just say 'diagnose'."
+                    return f"I've identified these symptoms: {symptoms_text}. Based on the {symptom_count} symptoms you've shared, here's my assessment: {self.get_diagnosis()}"
                 else:
-                    return f"I see you're experiencing {symptoms_text}. {follow_up} Please mention any other symptoms you're experiencing."
+                    remaining = 3 - symptom_count
+                    remaining_text = f"I need {remaining} more {('symptom' if remaining == 1 else 'symptoms')} to provide an accurate diagnosis. " if remaining > 0 else ""
+                    return f"I see you're experiencing {symptoms_text}. {remaining_text}{follow_up} Please mention any other symptoms you're experiencing."
             
             # Check if user wants a diagnosis with the symptoms collected so far
             if re.search(r'\b(diagnose|diagnosis|what do i have|what is it)\b', user_input.lower()):
-                if self.conversation_state["confirmed_symptoms"]:
+                symptom_count = len(self.conversation_state["confirmed_symptoms"])
+                if symptom_count >= 3:
                     self.conversation_state["stage"] = "diagnosis"
                     return self.get_diagnosis()
                 else:
-                    return "I don't have enough information yet. Could you please describe your symptoms?"
+                    remaining = 3 - symptom_count
+                    symptom_word = "symptoms" if remaining > 1 else "symptom"
+                    return f"I need at least 3 symptoms to provide an accurate diagnosis. Please share {remaining} more {symptom_word} you're experiencing."
             
             # No symptoms detected in the response
             return "I didn't recognize specific symptoms in your message. Could you please mention your symptoms more clearly? For example: headache, fever, cough, etc."

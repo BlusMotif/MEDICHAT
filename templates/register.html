@@ -3,6 +3,15 @@
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
+        <div class="col-md-6 mb-4 d-flex justify-content-center align-items-center">
+            <div class="auth-image-container position-relative overflow-hidden rounded shadow-sm">
+                <img src="{{ url_for('static', filename='images/healthcare.jpg') }}" alt="Healthcare Professional" class="img-fluid rounded" style="max-height: 450px;">
+                <div class="auth-image-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-end p-4 text-white">
+                    <h2 class="fw-bold mb-2">Join Medi Chat Today</h2>
+                    <p class="mb-0">Access personalized African healthcare advice</p>
+                </div>
+            </div>
+        </div>
         <div class="col-md-6 col-lg-5">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-primary text-white">
