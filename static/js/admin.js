@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         africanDiseasesError.classList.add('d-none');
         
         // Call API to start processing
-        fetch('/process_african_diseases', {
+        fetch('/process_medical_data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Check Medical Text processing status
     function checkMedicalTextStatus() {
-        fetch('/african_diseases_status')
+        fetch('/medical_data_status')
             .then(response => response.json())
             .then(data => {
                 // Update status message if provided
