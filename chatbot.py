@@ -8,6 +8,8 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from typing import Dict, List, Set, Optional
+from medical_api import MedicalResourceAPI
 
 # Initialize logger
 logging.basicConfig(level=logging.DEBUG)
@@ -32,6 +34,9 @@ class DoctorChatbot:
 
         self.lemmatizer = WordNetLemmatizer()
         self.stop_words = set(stopwords.words('english'))
+        
+        # Initialize medical API for external references
+        self.medical_api = MedicalResourceAPI()
         
         # Load medical data
         self.medical_data = self.load_medical_data()
@@ -200,7 +205,7 @@ class DoctorChatbot:
         if not self.conversation_state["confirmed_symptoms"]:
             return "I need more information about your symptoms to provide a helpful assessment."
         
-        # Find conditions that match the symptoms
+        # Find conditions that match the symptoms in our local database
         potential_conditions = {}
         
         for symptom in self.conversation_state["confirmed_symptoms"]:
@@ -215,7 +220,7 @@ class DoctorChatbot:
         if not sorted_conditions:
             return "Based on the symptoms you've described, I don't have enough information to suggest a potential cause. Please consult with a healthcare professional."
         
-        # Get top 3 conditions
+        # Get top 3 conditions from local database
         top_conditions = sorted_conditions[:3]
         
         # Generate diagnosis response
@@ -228,6 +233,29 @@ class DoctorChatbot:
             else:
                 response += "\n"
                 
+        # Also check external medical resources for additional information
+        try:
+            # Convert set to list for API
+            symptom_list = list(self.conversation_state["confirmed_symptoms"])
+            external_data = self.medical_api.search_medical_condition(symptom_list)
+            
+            if external_data and external_data.get("conditions"):
+                response += "\nAdditional information from medical references:\n\n"
+                
+                for condition_info in external_data["conditions"]:
+                    response += f"• {condition_info['name']}\n"
+                    if condition_info.get('description'):
+                        response += f"  {condition_info['description']}\n"
+                    if condition_info.get('source'):
+                        response += f"  Source: {condition_info['source']}\n\n"
+                
+                # Add the external API disclaimer if available
+                if external_data.get("disclaimer"):
+                    response += f"\n{external_data['disclaimer']}\n"
+        except Exception as e:
+            logger.error(f"Error getting external medical information: {str(e)}")
+            # Continue without external data if there's an error
+        
         response += "\n" + self.disclaimer
         
         return response
@@ -288,6 +316,31 @@ class DoctorChatbot:
             
             # Check if user is asking for more information or clarification
             if re.search(r'\b(more info|more information|tell me more|additional info|explain|clarify)\b', user_input.lower()):
+                # Get potential conditions from symptoms (similar to get_diagnosis)
+                potential_conditions = {}
+                for symptom in self.conversation_state["confirmed_symptoms"]:
+                    if symptom in self.medical_data["symptoms"]:
+                        conditions = self.medical_data["symptoms"][symptom]
+                        for condition in conditions:
+                            potential_conditions[condition] = potential_conditions.get(condition, 0) + 1
+                
+                # Try to get information about specific conditions mentioned in user input
+                for condition in potential_conditions.keys():
+                    if condition.lower() in user_input.lower():
+                        return self.get_treatment_info(condition)
+                
+                # Check if user is asking about a specific disease that wasn't in our diagnosis
+                # Common diseases to check for
+                specific_diseases = [
+                    "malaria", "typhoid", "dengue", "cholera", "tuberculosis", "tb", 
+                    "covid", "flu", "influenza", "pneumonia", "bronchitis", "asthma",
+                    "diabetes", "hypertension", "cancer", "hiv", "aids"
+                ]
+                
+                for disease in specific_diseases:
+                    if disease in user_input.lower():
+                        return self.get_treatment_info(disease.title())
+                
                 return "For more detailed information about these conditions, please consult with a healthcare professional. They can provide personalized advice based on your medical history and a proper examination. " + self.disclaimer
             
             # Default response in diagnosis stage
@@ -296,6 +349,34 @@ class DoctorChatbot:
         # Default response if no other condition is met
         return "I'm not sure I understand. Could you please clarify or rephrase your question? You can describe your symptoms or ask for a diagnosis if we've already discussed your symptoms."
 
+    def get_treatment_info(self, condition):
+        """Get detailed treatment information for a specific condition"""
+        response = f"Here's more information about {condition}:\n\n"
+        
+        # Try to get information from our local database
+        if condition in self.medical_data["conditions"]:
+            response += f"Recommended self-care steps include: {', '.join(self.medical_data['conditions'][condition])}\n\n"
+        
+        # Try to get additional information from external sources
+        try:
+            treatment_info = self.medical_api.get_treatment_recommendations(condition)
+            
+            if treatment_info:
+                if treatment_info.get('treatment'):
+                    response += f"Additional treatment information:\n{treatment_info['treatment']}\n\n"
+                
+                if treatment_info.get('source'):
+                    response += f"Source: {treatment_info['source']}\n"
+                
+                if treatment_info.get('disclaimer'):
+                    response += f"\n{treatment_info['disclaimer']}\n"
+        except Exception as e:
+            logger.error(f"Error getting treatment information: {str(e)}")
+            # Continue without external data if there's an error
+        
+        response += "\n" + self.disclaimer
+        return response
+    
     def reset_conversation(self):
         """Reset the conversation state"""
         self.conversation_state = {
