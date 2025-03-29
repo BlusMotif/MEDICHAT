@@ -80,32 +80,27 @@ class DoctorChatbot:
         )
 
     def load_medical_data(self):
-        """Load the medical knowledge base from JSON file"""
+        """Load the medical knowledge base from JSON file or process the text file directly"""
         try:
-            # First, try to use the african diseases JSON file if it exists
-            data_path = Path(__file__).parent / "static" / "data" / "african_diseases.json"
+            # Force processing of the African diseases text file
+            logger.info("Processing African diseases text file directly.")
+            from process_african_diseases import process_african_diseases
             
-            # If African diseases file doesn't exist, look for general medical data
-            if not data_path.exists():
-                # Try the general medical data file
-                data_path = Path(__file__).parent / "static" / "data" / "medical_data.json"
+            # Process African diseases
+            success = process_african_diseases()
             
-            # If no files exist yet, process the African diseases text file
-            if not data_path.exists():
-                logger.info("No knowledge base found. Processing African diseases text file.")
-                # Import required module only when needed
-                from process_african_diseases import process_african_diseases
-                process_african_diseases()
-                
-                # Check if file was created
-                if not data_path.exists():
-                    logger.warning("Failed to process African diseases. Using basic knowledge base.")
-                    # Use basic African disease data
-                    return self._get_basic_african_disease_data()
+            if success:
+                # Try to load the medical_data.json file that was just created
+                data_path = os.path.join("static", "data", "medical_data.json")
+                if os.path.exists(data_path):
+                    with open(data_path, 'r', encoding='utf-8') as file:
+                        medical_data = json.load(file)
+                        logger.info(f"Successfully loaded African diseases data from {data_path}")
+                        return medical_data
             
-            # Load the data from file
-            with open(data_path, 'r') as file:
-                return json.load(file)
+            # If processing failed or file doesn't exist, fall back to basic data
+            logger.warning("Using basic African disease data as fallback.")
+            return self._get_basic_african_disease_data()
             
         except Exception as e:
             logger.error(f"Error loading medical data: {str(e)}")
@@ -220,7 +215,16 @@ class DoctorChatbot:
         
         for condition, _ in top_conditions:
             response += f"• {condition}\n"
-            if condition in self.medical_data["conditions"]:
+            
+            # Check if treatment info is available in the diseases dictionary (from African diseases text)
+            if "diseases" in self.medical_data and condition in self.medical_data["diseases"]:
+                disease_info = self.medical_data["diseases"][condition]
+                if "treatment" in disease_info:
+                    response += f"  Treatment: {disease_info['treatment']}\n\n"
+                else:
+                    response += "\n"
+            # Fallback to conditions dictionary if it exists
+            elif "conditions" in self.medical_data and condition in self.medical_data["conditions"]:
                 response += "  Possible self-care steps include: " + ", ".join(self.medical_data["conditions"][condition]) + "\n\n"
             else:
                 response += "\n"
@@ -345,8 +349,19 @@ class DoctorChatbot:
         """Get detailed treatment information for a specific condition"""
         response = f"Here's more information about {condition}:\n\n"
         
-        # Try to get information from our local database
-        if condition in self.medical_data["conditions"]:
+        # Check for information in the African diseases data structure
+        if "diseases" in self.medical_data and condition in self.medical_data["diseases"]:
+            disease_info = self.medical_data["diseases"][condition]
+            if "treatment" in disease_info:
+                response += f"Treatment: {disease_info['treatment']}\n\n"
+            if "diagnosis" in disease_info:
+                response += f"Diagnosis: {disease_info['diagnosis']}\n\n"
+            if "symptoms" in disease_info:
+                symptom_list = ", ".join(disease_info["symptoms"])
+                response += f"Common symptoms: {symptom_list}\n\n"
+        
+        # Try to get information from our traditional conditions structure if it exists
+        elif "conditions" in self.medical_data and condition in self.medical_data["conditions"]:
             response += f"Recommended self-care steps include: {', '.join(self.medical_data['conditions'][condition])}\n\n"
         
         # Try to get additional information from external sources

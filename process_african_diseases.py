@@ -20,25 +20,22 @@ def process_african_diseases():
         processor = AfricanDiseaseTextProcessor(text_file_path)
         disease_data = processor.process_text_file()
         
-        # Save the processed African disease data
+        # Create directories if they don't exist
+        os.makedirs(os.path.join("static", "data"), exist_ok=True)
+        
+        # Save directly to medical_data.json (not to a separate file)
+        medical_data_path = os.path.join("static", "data", "medical_data.json")
+        with open(medical_data_path, 'w', encoding='utf-8') as file:
+            import json
+            json.dump(disease_data, file, indent=4)
+        
+        logger.info(f"Processed {len(disease_data['diseases'])} African diseases from text file")
+        logger.info(f"Saved African disease data directly to medical_data.json")
+        
+        # Also save to african_diseases.json for backup
         african_data_path = os.path.join("static", "data", "african_diseases.json")
         processor.save_to_json(african_data_path)
         
-        logger.info(f"Processed {len(disease_data['diseases'])} African diseases from text file")
-        
-        # Get path to existing medical data
-        chatbot = DoctorChatbot()
-        medical_data_path = Path(__file__).parent / "static" / "data" / "medical_data.json"
-        
-        # Merge with existing medical data
-        merged_data = processor.merge_with_existing_medical_data(str(medical_data_path))
-        
-        # Save merged data
-        with open(medical_data_path, 'w', encoding='utf-8') as file:
-            import json
-            json.dump(merged_data, file, indent=4)
-        
-        logger.info(f"Successfully merged African disease data with existing medical knowledge base")
         return True
         
     except Exception as e:

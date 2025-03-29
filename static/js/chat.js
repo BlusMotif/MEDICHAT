@@ -123,14 +123,20 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Wrap consecutive list items in ul
         if (formatted.includes('<li>')) {
-            formatted = formatted.replace(/(<li>.*?<\/li>)+/g, '<ul>$&</ul>');
+            formatted = formatted.replace(/(<li>.*?<\/li>)+/g, '<ul class="ps-3 mb-0">$&</ul>');
         }
         
         // Bold text
-        formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary">$1</strong>');
         
         // Italics
         formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        
+        // Format disease names in all caps (common in the African diseases text file)
+        formatted = formatted.replace(/\b([A-Z]{2,}(?:\s[A-Z]{2,})*)\b/g, '<span class="text-danger fw-bold">$1</span>');
+        
+        // Enhance symptom lists
+        formatted = formatted.replace(/(Symptoms|Diagnosis|Treatment):/g, '<strong class="text-primary">$1:</strong>');
         
         return formatted;
     }

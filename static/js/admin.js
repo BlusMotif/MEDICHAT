@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Statistics Elements
     const symptomCount = document.getElementById('symptomCount');
     const conditionCount = document.getElementById('conditionCount');
+    const africanDiseaseCount = document.getElementById('africanDiseaseCount');
     
     // Update knowledge base status when modal opens
     document.getElementById('adminModal').addEventListener('shown.bs.modal', function() {
@@ -109,12 +110,41 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('/static/data/medical_data.json')
             .then(response => response.json())
             .then(data => {
-                symptomCount.textContent = Object.keys(data.symptoms).length;
-                conditionCount.textContent = Object.keys(data.conditions).length;
+                let totalSymptoms = 0;
+                let totalConditions = 0;
+                let africanDiseases = 0;
+                
+                // Count symptoms (they might be in different data structures)
+                if (data.symptoms) {
+                    totalSymptoms += Object.keys(data.symptoms).length;
+                }
+                
+                // Count conditions/diseases
+                if (data.conditions) {
+                    totalConditions += Object.keys(data.conditions).length;
+                }
+                
+                // Count African diseases specifically
+                if (data.diseases) {
+                    africanDiseases = Object.keys(data.diseases).length;
+                    totalConditions += africanDiseases;
+                    
+                    // Also count their symptoms
+                    Object.values(data.diseases).forEach(disease => {
+                        if (disease.symptoms && Array.isArray(disease.symptoms)) {
+                            totalSymptoms += disease.symptoms.length;
+                        }
+                    });
+                }
+                
+                symptomCount.textContent = totalSymptoms;
+                conditionCount.textContent = totalConditions;
+                africanDiseaseCount.textContent = africanDiseases;
             })
             .catch(error => {
                 symptomCount.textContent = 'Error loading';
                 conditionCount.textContent = 'Error loading';
+                africanDiseaseCount.textContent = 'Error loading';
                 console.error('Error loading medical data:', error);
             });
     }

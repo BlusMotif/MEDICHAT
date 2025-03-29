@@ -62,13 +62,30 @@
                         </button>
                     </form>
                     <div class="mt-2">
-                        <p class="mb-1 small fw-bold text-emphasis">Common symptoms:</p>
+                        <p class="mb-1 small fw-bold text-emphasis">Common symptoms in Africa:</p>
                         <div class="d-flex flex-wrap gap-1">
+                            <button class="btn btn-sm quick-symptom">High Fever</button>
+                            <button class="btn btn-sm quick-symptom">Chills</button>
+                            <button class="btn btn-sm quick-symptom">Sweating</button>
                             <button class="btn btn-sm quick-symptom">Headache</button>
-                            <button class="btn btn-sm quick-symptom">Fever</button>
-                            <button class="btn btn-sm quick-symptom">Cough</button>
-                            <button class="btn btn-sm quick-symptom">Sore Throat</button>
+                            <button class="btn btn-sm quick-symptom">Nausea</button>
+                            <button class="btn btn-sm quick-symptom">Jaundice</button>
+                            <button class="btn btn-sm quick-symptom">Abdominal Pain</button>
+                            <button class="btn btn-sm quick-symptom">Diarrhea</button>
                             <button class="btn btn-sm quick-symptom">Fatigue</button>
+                            <button class="btn btn-sm quick-symptom">Rash</button>
+                        </div>
+                        <div class="d-flex flex-wrap gap-1 mt-1">
+                            <button class="btn btn-sm quick-symptom">Joint Pain</button>
+                            <button class="btn btn-sm quick-symptom">Vomiting</button>
+                            <button class="btn btn-sm quick-symptom">Bloody Urine</button>
+                            <button class="btn btn-sm quick-symptom">Convulsions</button>
+                            <button class="btn btn-sm quick-symptom">Muscle Aches</button>
+                            <button class="btn btn-sm quick-symptom">Cough</button>
+                            <button class="btn btn-sm quick-symptom">Weight Loss</button>
+                            <button class="btn btn-sm quick-symptom">Night Sweats</button>
+                            <button class="btn btn-sm quick-symptom">Sore Throat</button>
+                            <button class="btn btn-sm quick-symptom">Enlarged Liver</button>
                         </div>
                     </div>
                 </div>
@@ -120,14 +137,24 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Dr. Bot is an AI-powered chatbot designed to help you understand potential causes for your symptoms.</p>
+                    <p>Dr. Bot is an AI-powered chatbot designed to help you understand potential causes for your symptoms, with a special focus on <strong>common diseases found in Africa</strong>.</p>
                     
                     <p class="fw-bold">How to use Dr. Bot:</p>
                     <ol>
                         <li>Describe your symptoms in detail</li>
                         <li>Answer follow-up questions to provide more context</li>
-                        <li>Receive potential causes and self-care recommendations</li>
+                        <li>Receive potential causes and treatment recommendations</li>
                     </ol>
+                    
+                    <p class="fw-bold mt-3">African Disease Specialization:</p>
+                    <p>This chatbot has been specially trained with information about common African diseases such as:</p>
+                    <ul class="mb-3">
+                        <li>Malaria</li>
+                        <li>Typhoid Fever</li>
+                        <li>Yellow Fever</li>
+                        <li>African Trypanosomiasis</li>
+                        <li>And many more region-specific conditions</li>
+                    </ul>
                     
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-triangle me-2"></i>
@@ -189,8 +216,9 @@
                     <h6 class="fw-bold">Current Knowledge Base</h6>
                     <p class="text-emphasis">The chatbot currently understands:</p>
                     <ul class="fw-semibold">
-                        <li>Symptoms: <span id="symptomCount" class="text-primary">...</span></li>
-                        <li>Medical Conditions: <span id="conditionCount" class="text-primary">...</span></li>
+                        <li>Total Symptoms: <span id="symptomCount" class="text-primary">...</span></li>
+                        <li>Total Medical Conditions: <span id="conditionCount" class="text-primary">...</span></li>
+                        <li>African Diseases: <span id="africanDiseaseCount" class="text-success">...</span></li>
                     </ul>
                 </div>
                 <div class="modal-footer">

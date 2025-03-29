@@ -88,6 +88,19 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Improved visibility in response message text */
+.message-text ul, .message-text li {
+    margin-bottom: 0.5rem;
+}
+
+.message-text .text-primary {
+    font-weight: bold;
+}
+
+.message-text .text-danger {
+    color: #ff6b6b !important; /* Brighter red that works in both dark and light modes */
+}
+
 /* Better contrast for message bubbles */
 [data-bs-theme="dark"] .user-message .message-content {
     background-color: #0d6efd !important;
@@ -100,9 +113,18 @@
     color: #f8f9fa;
 }
 
+[data-bs-theme="dark"] .bot-message .message-text strong {
+    color: #74c0fc !important; /* Brighter blue for better visibility in dark mode */
+}
+
 [data-bs-theme="light"] .bot-message .message-content {
     background-color: #e9ecef !important;
     border: 1px solid #ced4da;
+    color: #212529;
+}
+
+[data-bs-theme="light"] .bot-message .message-text strong {
+    color: #1971c2 !important; /* Darker blue for better visibility in light mode */
 }
 
 [data-bs-theme="light"] .user-message .message-content {
