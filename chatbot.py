@@ -82,12 +82,12 @@ class DoctorChatbot:
     def load_medical_data(self):
         """Load the medical knowledge base from JSON file or process the text file directly"""
         try:
-            # Force processing of the African diseases text file
-            logger.info("Processing African diseases text file directly.")
-            from process_african_diseases import process_african_diseases
+            # Force processing of the medical text file
+            logger.info("Processing medical text file directly.")
+            from process_medical_data import process_medical_text
             
-            # Process African diseases
-            success = process_african_diseases()
+            # Process medical text
+            success = process_medical_text()
             
             if success:
                 # Try to load the medical_data.json file that was just created
@@ -95,20 +95,20 @@ class DoctorChatbot:
                 if os.path.exists(data_path):
                     with open(data_path, 'r', encoding='utf-8') as file:
                         medical_data = json.load(file)
-                        logger.info(f"Successfully loaded African diseases data from {data_path}")
+                        logger.info(f"Successfully loaded medical data from {data_path}")
                         return medical_data
             
             # If processing failed or file doesn't exist, fall back to basic data
-            logger.warning("Using basic African disease data as fallback.")
-            return self._get_basic_african_disease_data()
+            logger.warning("Using basic medical data as fallback.")
+            return self._get_basic_medical_data()
             
         except Exception as e:
             logger.error(f"Error loading medical data: {str(e)}")
-            # Return a basic dataset focused on African diseases
-            return self._get_basic_african_disease_data()
+            # Return a basic dataset focused on common diseases
+            return self._get_basic_medical_data()
             
-    def _get_basic_african_disease_data(self):
-        """Return a basic dataset focused on common African diseases"""
+    def _get_basic_medical_data(self):
+        """Return a basic dataset focused on common diseases"""
         return {
             "symptoms": {
                 "high fever": ["MALARIA", "TYPHOID FEVER", "YELLOW FEVER", "DENGUE FEVER"],
@@ -231,7 +231,7 @@ class DoctorChatbot:
             
             response += f"• **{condition}** - {confidence_level}\n"
             
-            # Check if treatment info is available in the diseases dictionary (from African diseases text)
+            # Check if treatment info is available in the diseases dictionary (from medical text)
             if "diseases" in self.medical_data and condition in self.medical_data["diseases"]:
                 disease_info = self.medical_data["diseases"][condition]
                 if "treatment" in disease_info:
@@ -257,7 +257,7 @@ class DoctorChatbot:
                 # Only get enough conditions to bring our total to 2
                 remaining_slots = 2 - len(top_conditions)
                 for condition_info in external_data["conditions"][:remaining_slots]:
-                    # External sources typically have less confidence since they aren't tailored to African diseases
+                    # External sources typically have less confidence since they aren't tailored to our medical database
                     response += f"• **{condition_info['name']}** - Possible Sickness\n"
                     if condition_info.get('description'):
                         response += f"  {condition_info['description']}\n"
@@ -374,7 +374,7 @@ class DoctorChatbot:
         """Get detailed treatment information for a specific condition"""
         response = f"Here's more information about {condition}:\n\n"
         
-        # Check for information in the African diseases data structure
+        # Check for information in the medical diseases data structure
         if "diseases" in self.medical_data and condition in self.medical_data["diseases"]:
             disease_info = self.medical_data["diseases"][condition]
             if "treatment" in disease_info:

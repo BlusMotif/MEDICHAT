@@ -183,7 +183,7 @@ class PDFMedicalProcessor:
             "dermatitis", "eczema", "psoriasis", "anemia", "leukemia",
             "cancer", "tumor", "fracture", "sprain", "strain",
             "concussion", "epilepsy", "stroke", "heart attack", "heart failure",
-            # Add common African diseases
+            # Add common diseases
             "malaria", "typhoid fever", "typhoid", "cholera", "yellow fever",
             "tuberculosis", "tb", "hiv/aids", "aids", "ebola", "dengue fever",
             "schistosomiasis", "bilharzia", "trypanosomiasis", "sleeping sickness",
@@ -216,7 +216,7 @@ class PDFMedicalProcessor:
             "chest pain", "abdominal pain", "back pain", "joint pain", "muscle pain",
             "sore throat", "runny nose", "congestion", "sneezing", "sweating",
             "chills", "insomnia", "loss of appetite", "weight loss", "weight gain",
-            # Symptoms specific to common African diseases
+            # Symptoms specific to common tropical diseases
             "high fever", "intermittent fever", "cyclic fever", "recurrent fever", 
             "night sweats", "shivering", "rigors", "jaundice", "enlarged spleen",
             "enlarged liver", "splenomegaly", "hepatomegaly", "anemia", "malaise",
@@ -244,7 +244,7 @@ class PDFMedicalProcessor:
             "chest pain", "abdominal pain", "back pain", "joint pain", "muscle pain",
             "sore throat", "runny nose", "congestion", "sneezing", "sweating",
             "chills", "insomnia", "loss of appetite", "weight loss", "weight gain",
-            # Symptoms specific to common African diseases
+            # Symptoms specific to common tropical diseases
             "high fever", "intermittent fever", "cyclic fever", "recurrent fever", 
             "night sweats", "shivering", "rigors", "jaundice", "enlarged spleen",
             "enlarged liver", "splenomegaly", "hepatomegaly", "anemia", "malaise",
@@ -262,7 +262,7 @@ class PDFMedicalProcessor:
             "hypothyroidism", "hyperthyroidism", "arthritis", "osteoporosis",
             "asthma", "copd", "emphysema", "allergies", "eczema", 
             "psoriasis", "dermatitis", "anxiety", "depression", "insomnia",
-            # African common diseases
+            # Common diseases around the world
             "malaria", "typhoid fever", "typhoid", "yellow fever", "cholera",
             "tuberculosis", "tb", "hiv", "aids", "ebola", "dengue fever",
             "schistosomiasis", "bilharzia", "trypanosomiasis", "sleeping sickness",

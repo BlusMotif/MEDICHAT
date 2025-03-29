@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // African Diseases Text Processing Elements
+    // Medical Text Processing Elements
     const processAfricanDiseasesBtn = document.getElementById('processAfricanDiseasesBtn');
     const africanDiseasesStatus = document.getElementById('africanDiseasesStatus');
     const africanDiseasesComplete = document.getElementById('africanDiseasesComplete');
@@ -17,13 +17,13 @@ document.addEventListener('DOMContentLoaded', function() {
         updateKnowledgeBaseStats();
     });
     
-    // Process African Diseases button
+    // Process Medical Text button
     processAfricanDiseasesBtn.addEventListener('click', function() {
-        startAfricanDiseasesProcessing();
+        startMedicalTextProcessing();
     });
     
-    // Start African Diseases text processing
-    function startAfricanDiseasesProcessing() {
+    // Start Medical Text processing
+    function startMedicalTextProcessing() {
         // Reset UI
         processAfricanDiseasesBtn.disabled = true;
         africanDiseasesStatus.classList.remove('d-none');
@@ -42,23 +42,23 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.status === 'started') {
                 // Start checking status
                 africanDiseasesStatusText.textContent = 'Processing started...';
-                checkAfricanDiseasesStatus();
+                checkMedicalTextStatus();
             } else if (data.status === 'already_running') {
                 // Already running, start checking status
                 africanDiseasesStatusText.textContent = 'Processing already in progress...';
-                checkAfricanDiseasesStatus();
+                checkMedicalTextStatus();
             } else {
                 // Error
-                showAfricanDiseasesError('Failed to start African diseases text processing');
+                showProcessingError('Failed to start medical text processing');
             }
         })
         .catch(error => {
-            showAfricanDiseasesError('Error: ' + error.message);
+            showProcessingError('Error: ' + error.message);
         });
     }
     
-    // Check African Diseases text processing status
-    function checkAfricanDiseasesStatus() {
+    // Check Medical Text processing status
+    function checkMedicalTextStatus() {
         fetch('/african_diseases_status')
             .then(response => response.json())
             .then(data => {
@@ -70,24 +70,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Check if still running
                 if (data.is_running) {
                     // Check again in 2 seconds
-                    setTimeout(checkAfricanDiseasesStatus, 2000);
+                    setTimeout(checkMedicalTextStatus, 2000);
                 } else {
                     // Processing complete
                     if (data.completed) {
-                        showAfricanDiseasesComplete();
+                        showProcessingComplete();
                     } else {
                         // Show error message
-                        showAfricanDiseasesError(data.message || 'Processing failed');
+                        showProcessingError(data.message || 'Processing failed');
                     }
                 }
             })
             .catch(error => {
-                showAfricanDiseasesError('Error checking status: ' + error.message);
+                showProcessingError('Error checking status: ' + error.message);
             });
     }
     
-    // Show African diseases processing complete
-    function showAfricanDiseasesComplete() {
+    // Show text processing complete
+    function showProcessingComplete() {
         africanDiseasesStatus.classList.add('d-none');
         africanDiseasesComplete.classList.remove('d-none');
         processAfricanDiseasesBtn.disabled = false;
@@ -96,8 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
         updateKnowledgeBaseStats();
     }
     
-    // Show African diseases processing error
-    function showAfricanDiseasesError(message) {
+    // Show text processing error
+    function showProcessingError(message) {
         africanDiseasesStatus.classList.add('d-none');
         africanDiseasesError.classList.remove('d-none');
         africanDiseasesErrorMessage.textContent = message;
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 let totalSymptoms = 0;
                 let totalConditions = 0;
-                let africanDiseases = 0;
+                let regionalDiseases = 0;
                 
                 // Count symptoms (they might be in different data structures)
                 if (data.symptoms) {
@@ -124,10 +124,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     totalConditions += Object.keys(data.conditions).length;
                 }
                 
-                // Count African diseases specifically
+                // Count regional diseases specifically
                 if (data.diseases) {
-                    africanDiseases = Object.keys(data.diseases).length;
-                    totalConditions += africanDiseases;
+                    regionalDiseases = Object.keys(data.diseases).length;
+                    totalConditions += regionalDiseases;
                     
                     // Also count their symptoms
                     Object.values(data.diseases).forEach(disease => {
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 symptomCount.textContent = totalSymptoms;
                 conditionCount.textContent = totalConditions;
-                africanDiseaseCount.textContent = africanDiseases;
+                africanDiseaseCount.textContent = regionalDiseases;
             })
             .catch(error => {
                 symptomCount.textContent = 'Error loading';

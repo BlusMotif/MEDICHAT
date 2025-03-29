@@ -9,8 +9,8 @@ from typing import Dict, List, Set, Optional
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class AfricanDiseaseTextProcessor:
-    """Process text files containing information about African diseases"""
+class MedicalTextProcessor:
+    """Process text files containing information about medical conditions and diseases"""
     
     def __init__(self, text_file_path: str):
         """
@@ -96,7 +96,7 @@ class AfricanDiseaseTextProcessor:
         try:
             if not output_path:
                 # Use default path in static/data directory
-                default_path = Path(__file__).parent / "static" / "data" / "african_diseases.json"
+                default_path = Path(__file__).parent / "static" / "data" / "medical_data.json"
                 output_path = str(default_path)
             
             # Ensure directory exists
@@ -154,11 +154,11 @@ class AfricanDiseaseTextProcessor:
             if "symptom_related_questions" not in existing_data:
                 existing_data["symptom_related_questions"] = {}
             
-            # Add specific questions for African disease symptoms
+            # Add specific questions for common disease symptoms
             existing_data["symptom_related_questions"]["high fever"] = [
                 "Does your fever come and go in cycles?",
                 "Do you have chills before the fever starts?",
-                "Have you been in a malaria-endemic area recently?"
+                "Have you been in an area with endemic diseases recently?"
             ]
             
             existing_data["symptom_related_questions"]["jaundice"] = [
@@ -182,6 +182,6 @@ class AfricanDiseaseTextProcessor:
 
 # For testing
 if __name__ == "__main__":
-    processor = AfricanDiseaseTextProcessor("attached_assets/Africa_Common_Diseases_Symptoms_Treatment (1).txt")
+    processor = MedicalTextProcessor("attached_assets/Common_Diseases_Symptoms_Treatment.txt")
     processor.process_text_file()
     processor.save_to_json()

@@ -42,8 +42,8 @@ def process_medical_text():
         logger.error(f"Error processing medical text: {str(e)}")
         return False
 
-# Keep backward compatibility with existing function name
-process_african_diseases = process_medical_text
+# Main function for processing medical data
+# This function is called during application startup
 
 if __name__ == "__main__":
     process_medical_text()
