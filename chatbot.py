@@ -51,9 +51,9 @@ class DoctorChatbot:
         
         # Greeting messages
         self.greetings = [
-            "Hello! I'm Dr. Bot, a virtual assistant that can help identify potential health issues based on your symptoms. What symptoms are you experiencing?",
-            "Hi there! I'm Dr. Bot, your virtual medical assistant. Please describe any symptoms you're experiencing so I can try to help.",
-            "Welcome! I'm Dr. Bot, here to assist with preliminary medical advice. What symptoms are you having today?"
+            "Hello! I'm Medi Chat, a virtual assistant that can help identify potential health issues based on your symptoms. Please share at least 3 symptoms for an accurate diagnosis.",
+            "Hi there! I'm Medi Chat, your virtual medical assistant. To provide a helpful assessment, I'll need you to describe at least 3 symptoms you're experiencing.",
+            "Welcome! I'm Medi Chat, here to assist with preliminary medical advice. For an accurate assessment, please share at least 3 symptoms you're having today."
         ]
         
         # Follow-up questions
@@ -191,6 +191,15 @@ class DoctorChatbot:
         """Generate a diagnosis based on confirmed symptoms"""
         if not self.conversation_state["confirmed_symptoms"]:
             return "I need more information about your symptoms to provide a helpful assessment."
+            
+        # Check if we have at least 3 symptoms
+        symptom_count = len(self.conversation_state["confirmed_symptoms"])
+        if symptom_count < 3:
+            remaining = 3 - symptom_count
+            symptom_word = "symptoms" if remaining > 1 else "symptom"
+            # Update the conversation state back to collecting symptoms
+            self.conversation_state["stage"] = "collecting_symptoms"
+            return f"I need at least 3 symptoms to provide an accurate diagnosis. Please share {remaining} more {symptom_word} you're experiencing."
         
         # Find conditions that match the symptoms in our local database
         potential_conditions = {}
@@ -333,7 +342,16 @@ class DoctorChatbot:
             if new_symptoms:
                 self.conversation_state["confirmed_symptoms"].update(new_symptoms)
                 symptoms_text = ", ".join(new_symptoms)
-                return f"I've added these additional symptoms: {symptoms_text}. " + self.get_diagnosis()
+                
+                # Ensure we still have at least 3 symptoms for diagnosis
+                symptom_count = len(self.conversation_state["confirmed_symptoms"])
+                if symptom_count >= 3:
+                    return f"I've added these additional symptoms: {symptoms_text}. " + self.get_diagnosis()
+                else:
+                    # If symptoms have been removed or we somehow have fewer than 3
+                    self.conversation_state["stage"] = "collecting_symptoms"
+                    remaining = 3 - symptom_count
+                    return f"I've added these additional symptoms: {symptoms_text}. I need at least {remaining} more symptom(s) to provide an accurate diagnosis. Please share any other symptoms you're experiencing."
             
             # Check if user is asking for more information or clarification
             if re.search(r'\b(more info|more information|tell me more|additional info|explain|clarify)\b', user_input.lower()):
