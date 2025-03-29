@@ -151,11 +151,14 @@
                 </div>
                 <div class="modal-body">
                     <h6>Medical Knowledge Base</h6>
-                    <p class="text-emphasis">Process medical PDFs to enhance the chatbot's knowledge base.</p>
+                    <p class="text-emphasis">Process medical resources to enhance the chatbot's knowledge base.</p>
                     
-                    <div class="mb-3">
+                    <div class="mb-3 d-flex gap-2">
                         <button id="processPdfsBtn" class="btn btn-primary fw-bold">
                             Process Medical PDFs
+                        </button>
+                        <button id="processAfricanDiseasesBtn" class="btn btn-success fw-bold">
+                            Process African Diseases Text
                         </button>
                     </div>
                     
@@ -178,6 +181,17 @@
                         </div>
                     </div>
                     
+                    <div id="africanDiseasesStatus" class="d-none">
+                        <div class="alert alert-info">
+                            <div class="d-flex align-items-center">
+                                <div class="spinner-border spinner-border-sm me-2" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <span class="fw-bold" id="africanDiseasesStatusText">Processing African diseases text file...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div id="pdfProcessingComplete" class="d-none">
                         <div class="alert alert-success">
                             <i class="fas fa-check-circle me-2"></i>
@@ -185,10 +199,24 @@
                         </div>
                     </div>
                     
+                    <div id="africanDiseasesComplete" class="d-none">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            African diseases text processing complete! The chatbot now has better knowledge of common African diseases.
+                        </div>
+                    </div>
+                    
                     <div id="pdfProcessingError" class="d-none">
                         <div class="alert alert-danger">
                             <i class="fas fa-exclamation-triangle me-2"></i>
                             <span id="pdfErrorMessage">An error occurred during PDF processing.</span>
+                        </div>
+                    </div>
+                    
+                    <div id="africanDiseasesError" class="d-none">
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="africanDiseasesErrorMessage">An error occurred during African diseases text processing.</span>
                         </div>
                     </div>
                     
