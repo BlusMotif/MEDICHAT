@@ -1,1084 +1,368 @@
 {
-    "diseases": {
-        "MALARIA": {
-            "symptoms": [
-                "High fever",
-                "chills",
-                "sweating",
-                "headache",
-                "nausea",
-                "muscle pain",
-                "fatigue"
-            ],
-            "diagnosis": "Blood smear test, Rapid Diagnostic Test (RDT), Polymerase Chain Reaction (PCR).",
-            "treatment": "Antimalarial drugs (Artemisinin-based Combination Therapy - ACT), supportive care for fever and dehydration."
-        },
-        "TYPHOID FEVER": {
-            "symptoms": [
-                "Prolonged high fever",
-                "abdominal pain",
-                "loss of appetite",
-                "diarrhea or constipation",
-                "fatigue",
-                "rash (rose spots)"
-            ],
-            "diagnosis": "Widal test, blood culture, stool and urine analysis.",
-            "treatment": "Antibiotics (Ciprofloxacin, Azithromycin), hydration therapy."
-        },
-        "CHOLERA": {
-            "symptoms": [
-                "Severe watery diarrhea",
-                "dehydration",
-                "muscle cramps",
-                "vomiting"
-            ],
-            "diagnosis": "Stool culture, Rapid Cholera Dipstick Test.",
-            "treatment": "Oral Rehydration Therapy (ORT), intravenous fluids, antibiotics (Doxycycline, Azithromycin)."
-        },
-        "TUBERCULOSIS (TB)": {
-            "symptoms": [
-                "Persistent cough (lasting more than 3 weeks)",
-                "weight loss",
-                "night sweats",
-                "fever",
-                "fatigue",
-                "chest pain"
-            ],
-            "diagnosis": "Tuberculin skin test (Mantoux), sputum smear microscopy, chest X-ray, GeneXpert test.",
-            "treatment": "6-month course of antibiotics (Rifampin, Isoniazid, Ethambutol, Pyrazinamide)."
-        },
-        "HEPATITIS B": {
-            "symptoms": [
-                "Jaundice (yellowing of skin and eyes)",
-                "dark urine",
-                "fatigue",
-                "nausea",
-                "abdominal pain"
-            ],
-            "diagnosis": "Blood test for Hepatitis B surface antigen (HBsAg), liver function tests.",
-            "treatment": "Antiviral medications (Tenofovir, Entecavir), liver monitoring, supportive therapy."
-        },
-        "YELLOW FEVER": {
-            "symptoms": [
-                "Fever",
-                "chills",
-                "muscle pain",
-                "nausea",
-                "vomiting",
-                "jaundice",
-                "bleeding from gums or nose"
-            ],
-            "diagnosis": "Blood test for yellow fever virus (PCR or ELISA test).",
-            "treatment": "Supportive care (fluids, pain relievers, rest). Preventable by vaccination."
-        },
-        "LASSA FEVER": {
-            "symptoms": [
-                "Fever",
-                "sore throat",
-                "chest pain",
-                "bleeding (nose",
-                "gums)",
-                "abdominal pain",
-                "shock in severe cases"
-            ],
-            "diagnosis": "Lassa virus blood test (PCR), ELISA test.",
-            "treatment": "Ribavirin antiviral therapy, supportive care."
-        },
-        "MENINGITIS": {
-            "symptoms": [
-                "Stiff neck",
-                "severe headache",
-                "fever",
-                "nausea",
-                "sensitivity to light",
-                "confusion"
-            ],
-            "diagnosis": "Lumbar puncture (spinal tap), blood tests, CT scan.",
-            "treatment": "Antibiotics for bacterial meningitis, antiviral treatment for viral meningitis, corticosteroids to reduce inflammation."
-        },
-        "MEASLES": {
-            "symptoms": [
-                "High fever",
-                "runny nose",
-                "cough",
-                "red eyes",
-                "rash that spreads from the face downwards"
-            ],
-            "diagnosis": "Clinical observation, blood test for measles IgM antibodies.",
-            "treatment": "Supportive care (fluids, fever reducers, vitamin A supplements). Preventable by vaccination."
-        },
-        "HIV/AIDS": {
-            "symptoms": [
-                "Swollen lymph nodes",
-                "fever",
-                "chronic diarrhea",
-                "weight loss",
-                "night sweats",
-                "skin rashes"
-            ],
-            "diagnosis": "HIV rapid test, ELISA test, CD4 count.",
-            "treatment": "Antiretroviral therapy (ART) to manage the virus and prevent complications."
-        },
-        "EBOLA VIRUS DISEASE": {
-            "symptoms": [
-                "High fever",
-                "severe headache",
-                "muscle pain",
-                "vomiting",
-                "diarrhea",
-                "internal and external bleeding"
-            ],
-            "diagnosis": "PCR test for Ebola virus.",
-            "treatment": "Supportive care, rehydration therapy, experimental monoclonal antibody treatments."
-        },
-        "SCHISTOSOMIASIS (BILHARZIA)": {
-            "symptoms": [
-                "Bloody urine",
-                "abdominal pain",
-                "enlarged liver and spleen",
-                "itchy skin rash"
-            ],
-            "diagnosis": "Urine or stool microscopy, blood test.",
-            "treatment": "Praziquantel (antiparasitic medication)."
-        },
-        "ONCHOCERCIASIS (RIVER BLINDNESS)": {
-            "symptoms": [
-                "Skin rash",
-                "intense itching",
-                "nodules under the skin",
-                "progressive blindness"
-            ],
-            "diagnosis": "Skin snip test, blood test.",
-            "treatment": "Ivermectin (antiparasitic drug), doxycycline for secondary infections."
-        },
-        "LEPROSY": {
-            "symptoms": [
-                "Skin lesions",
-                "loss of sensation in affected areas",
-                "nerve damage",
-                "muscle weakness"
-            ],
-            "diagnosis": "Skin biopsy, clinical examination.",
-            "treatment": "Multi-drug therapy (MDT) with Rifampin, Dapsone, and Clofazimine."
-        },
-        "RABIES": {
-            "symptoms": [
-                "Fever",
-                "hydrophobia (fear of water)",
-                "muscle spasms",
-                "confusion",
-                "paralysis"
-            ],
-            "diagnosis": "Skin biopsy, saliva test, cerebrospinal fluid analysis.",
-            "treatment": "No cure after symptom onset, but rabies vaccine and immunoglobulin prevent onset if given immediately after exposure."
-        },
-        "DENGUE FEVER": {
-            "symptoms": [
-                "High fever",
-                "severe joint and muscle pain",
-                "rash",
-                "bleeding gums"
-            ],
-            "diagnosis": "Blood test for dengue virus.",
-            "treatment": "Supportive care (fluids, pain relievers like acetaminophen). Preventable by mosquito control."
-        },
-        "SICKLE CELL DISEASE": {
-            "symptoms": [
-                "Severe pain episodes",
-                "anemia",
-                "swelling in hands and feet",
-                "frequent infections",
-                "vision problems"
-            ],
-            "diagnosis": "Blood test, hemoglobin electrophoresis.",
-            "treatment": "Pain management, blood transfusions, hydroxyurea therapy."
-        },
-        "PNEUMONIA": {
-            "symptoms": [
-                "Cough with phlegm",
-                "chest pain",
-                "fever",
-                "difficulty breathing",
-                "fatigue"
-            ],
-            "diagnosis": "Chest X-ray, sputum test, blood test.",
-            "treatment": "Antibiotics for bacterial pneumonia, antivirals for viral pneumonia, oxygen therapy if needed."
-        },
-        "BRUCELLOSIS": {
-            "symptoms": [
-                "Fever",
-                "joint pain",
-                "fatigue",
-                "muscle aches",
-                "weight loss"
-            ],
-            "diagnosis": "Blood test, culture test.",
-            "treatment": "Antibiotics (Doxycycline and Rifampin for six weeks)."
-        },
-        "FILARIASIS": {
-            "symptoms": [
-                "Swelling of limbs (elephantiasis)",
-                "skin thickening",
-                "fever",
-                "rashes"
-            ],
-            "diagnosis": "Blood smear test.",
-            "treatment": "Antiparasitic drugs (Diethylcarbamazine, Ivermectin)."
-        },
-        "LEISHMANIASIS": {
-            "symptoms": [
-                "Skin sores",
-                "weight loss",
-                "fever",
-                "swollen liver and spleen"
-            ],
-            "diagnosis": "Tissue biopsy, blood test.",
-            "treatment": "Antimonial drugs, Amphotericin B."
-        },
-        "INFLUENZA (FLU)": {
-            "symptoms": [
-                "Fever",
-                "chills",
-                "body aches",
-                "sore throat",
-                "cough",
-                "congestion",
-                "fatigue"
-            ],
-            "diagnosis": "Rapid influenza diagnostic test (RIDT), PCR test.",
-            "treatment": "Antiviral medications (Oseltamivir, Zanamivir), rest, hydration."
-        },
-        "HYPERTENSION (HIGH BLOOD PRESSURE)": {
-            "symptoms": [
-                "Often asymptomatic",
-                "but can cause headaches",
-                "dizziness",
-                "blurred vision",
-                "chest pain"
-            ],
-            "diagnosis": "Blood pressure measurement.",
-            "treatment": "Lifestyle changes (diet, exercise), antihypertensive medications."
-        },
-        "DIABETES MELLITUS": {
-            "symptoms": [
-                "Frequent urination",
-                "increased thirst",
-                "unexplained weight loss",
-                "fatigue",
-                "blurred vision"
-            ],
-            "diagnosis": "Blood glucose test, HbA1c test.",
-            "treatment": "Insulin therapy (for Type 1), oral hypoglycemic drugs (for Type 2), dietary management."
-        },
-        "GASTROENTERITIS": {
-            "symptoms": [
-                "Diarrhea",
-                "vomiting",
-                "stomach cramps",
-                "fever",
-                "dehydration"
-            ],
-            "diagnosis": "Stool sample test.",
-            "treatment": "Fluid replacement, antibiotics if bacterial infection is confirmed."
-        },
-        "ASTHMA": {
-            "symptoms": [
-                "Shortness of breath",
-                "wheezing",
-                "chest tightness",
-                "chronic cough"
-            ],
-            "diagnosis": "Pulmonary function test (Spirometry), peak flow measurement.",
-            "treatment": "Inhalers (Bronchodilators like Salbutamol), corticosteroids."
-        },
-        "PEPTIC ULCER DISEASE": {
-            "symptoms": [
-                "Burning stomach pain",
-                "bloating",
-                "nausea",
-                "weight loss"
-            ],
-            "diagnosis": "Endoscopy, H. pylori test.",
-            "treatment": "Proton pump inhibitors (Omeprazole), antibiotics for H. pylori."
-        },
-        "HEPATITIS C": {
-            "symptoms": [
-                "Jaundice",
-                "dark urine",
-                "fatigue",
-                "nausea",
-                "abdominal pain"
-            ],
-            "diagnosis": "Blood test for Hepatitis C antibodies.",
-            "treatment": "Antiviral medications (Sofosbuvir, Ledipasvir)."
-        },
-        "TRACHOMA": {
-            "symptoms": [
-                "Eye irritation",
-                "watery discharge",
-                "redness",
-                "blindness in severe cases"
-            ],
-            "diagnosis": "Clinical eye examination, PCR test.",
-            "treatment": "Antibiotics (Azithromycin), improved hygiene practices."
-        },
-        "SYPHILIS": {
-            "symptoms": [
-                "Painless sores",
-                "rashes",
-                "swollen lymph nodes",
-                "fever"
-            ],
-            "diagnosis": "Blood test (VDRL, RPR test).",
-            "treatment": "Penicillin injections."
-        },
-        "GONORRHEA": {
-            "symptoms": [
-                "Painful urination",
-                "discharge",
-                "pelvic pain",
-                "swollen testicles in men"
-            ],
-            "diagnosis": "Urine test, swab test.",
-            "treatment": "Antibiotics (Ceftriaxone, Azithromycin)."
-        },
-        "HERPES SIMPLEX VIRUS (HSV)": {
-            "symptoms": [
-                "Painful blisters around the mouth or genitals",
-                "fever",
-                "swollen lymph nodes"
-            ],
-            "diagnosis": "Blood test, PCR test.",
-            "treatment": "Antiviral drugs (Acyclovir, Valacyclovir)."
-        },
-        "LEPTOSPIROSIS": {
-            "symptoms": [
-                "Fever",
-                "muscle aches",
-                "chills",
-                "jaundice",
-                "kidney failure in severe cases"
-            ],
-            "diagnosis": "Blood or urine culture.",
-            "treatment": "Antibiotics (Doxycycline, Penicillin)."
-        },
-        "DERMATOPHYTOSIS (RINGWORM)": {
-            "symptoms": [
-                "Circular red rashes",
-                "itching",
-                "hair loss (in scalp infections)"
-            ],
-            "diagnosis": "Skin scraping test.",
-            "treatment": "Antifungal creams, oral antifungal medications."
-        },
-        "SCABIES": {
-            "symptoms": [
-                "Intense itching",
-                "red burrow tracks on skin",
-                "skin inflammation"
-            ],
-            "diagnosis": "Skin scraping test.",
-            "treatment": "Topical Permethrin cream, Ivermectin for severe cases."
-        },
-        "TETANUS": {
-            "symptoms": [
-                "Muscle stiffness",
-                "spasms",
-                "jaw lock",
-                "difficulty swallowing"
-            ],
-            "diagnosis": "Clinical examination.",
-            "treatment": "Tetanus vaccine, antibiotics, muscle relaxants."
-        },
-        "PERTUSSIS (WHOOPING COUGH)": {
-            "symptoms": [
-                "Severe coughing fits",
-                "vomiting after coughing",
-                "runny nose"
-            ],
-            "diagnosis": "Nasopharyngeal swab test.",
-            "treatment": "Antibiotics (Azithromycin, Erythromycin)."
-        },
-        "TONSILLITIS": {
-            "symptoms": [
-                "Sore throat",
-                "swollen tonsils",
-                "fever",
-                "difficulty swallowing"
-            ],
-            "diagnosis": "Throat swab test.",
-            "treatment": "Pain relievers, antibiotics if bacterial."
-        },
-        "STROKE": {
-            "symptoms": [
-                "Sudden numbness",
-                "slurred speech",
-                "difficulty walking",
-                "severe headache"
-            ],
-            "diagnosis": "CT scan, MRI.",
-            "treatment": "Clot-busting drugs (for ischemic stroke), blood pressure control."
-        },
-        "LEAD POISONING": {
-            "symptoms": [
-                "Abdominal pain",
-                "developmental delays in children",
-                "irritability",
-                "anemia"
-            ],
-            "diagnosis": "Blood lead level test.",
-            "treatment": "Chelation therapy."
-        },
-        "CHAGAS DISEASE": {
-            "symptoms": [
-                "Fever",
-                "swelling at the bite site",
-                "heart failure in chronic cases"
-            ],
-            "diagnosis": "Blood test, PCR test.",
-            "treatment": "Antiparasitic drugs (Benznidazole, Nifurtimox)."
-        },
-        "OSTEOMYELITIS": {
-            "symptoms": [
-                "Bone pain",
-                "fever",
-                "redness",
-                "swelling over affected bone"
-            ],
-            "diagnosis": "MRI, bone biopsy.",
-            "treatment": "IV antibiotics, surgery if severe."
-        },
-        "APPENDICITIS": {
-            "symptoms": [
-                "Sudden right lower abdominal pain",
-                "nausea",
-                "fever",
-                "vomiting"
-            ],
-            "diagnosis": "Abdominal ultrasound, CT scan.",
-            "treatment": "Surgical removal (Appendectomy)."
-        },
-        "POLIO": {
-            "symptoms": [
-                "Muscle weakness",
-                "paralysis",
-                "fever",
-                "headache"
-            ],
-            "diagnosis": "Stool or throat culture.",
-            "treatment": "No cure, supportive therapy, preventable with polio vaccine."
-        },
-        "LYMPHATIC FILARIASIS": {
-            "symptoms": [
-                "Swollen limbs (Elephantiasis)",
-                "skin thickening",
-                "fever"
-            ],
-            "diagnosis": "Blood smear test.",
-            "treatment": "Antiparasitic drugs (Ivermectin, Albendazole)."
-        },
-        "SLEEPING SICKNESS (TRYPANOSOMIASIS)": {
-            "symptoms": [
-                "Confusion",
-                "fever",
-                "sleep disturbances",
-                "swollen lymph nodes"
-            ],
-            "diagnosis": "Blood test, lumbar puncture.",
-            "treatment": "Antitrypanosomal drugs (Suramin, Melarsoprol)."
-        },
-        "HANTAVIRUS": {
-            "symptoms": [
-                "Fever",
-                "muscle aches",
-                "shortness of breath",
-                "kidney failure in severe cases"
-            ],
-            "diagnosis": "Blood test.",
-            "treatment": "Supportive care."
-        },
-        "BURULI ULCER": {
-            "symptoms": [
-                "Painless ulcer",
-                "swelling",
-                "tissue destruction"
-            ],
-            "diagnosis": "PCR test, biopsy.",
-            "treatment": "Antibiotics (Rifampin, Streptomycin)."
-        }
+  "conditions": [
+    {
+      "name": "# 50 COMMON DISEASES IN AFRICA WITH SYMPTOMS, DIAGNOSIS, AND TREATMENT",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
     },
-    "symptoms": {
-        "high fever": [
-            "MALARIA",
-            "MEASLES",
-            "EBOLA VIRUS DISEASE",
-            "DENGUE FEVER"
-        ],
-        "chills": [
-            "MALARIA",
-            "YELLOW FEVER",
-            "INFLUENZA (FLU)",
-            "LEPTOSPIROSIS"
-        ],
-        "sweating": [
-            "MALARIA"
-        ],
-        "headache": [
-            "MALARIA",
-            "POLIO"
-        ],
-        "nausea": [
-            "MALARIA",
-            "HEPATITIS B",
-            "YELLOW FEVER",
-            "MENINGITIS",
-            "PEPTIC ULCER DISEASE",
-            "HEPATITIS C",
-            "APPENDICITIS"
-        ],
-        "muscle pain": [
-            "MALARIA",
-            "YELLOW FEVER",
-            "EBOLA VIRUS DISEASE"
-        ],
-        "fatigue": [
-            "MALARIA",
-            "TYPHOID FEVER",
-            "TUBERCULOSIS (TB)",
-            "HEPATITIS B",
-            "PNEUMONIA",
-            "BRUCELLOSIS",
-            "INFLUENZA (FLU)",
-            "DIABETES MELLITUS",
-            "HEPATITIS C"
-        ],
-        "prolonged high fever": [
-            "TYPHOID FEVER"
-        ],
-        "abdominal pain": [
-            "TYPHOID FEVER",
-            "HEPATITIS B",
-            "LASSA FEVER",
-            "SCHISTOSOMIASIS (BILHARZIA)",
-            "HEPATITIS C",
-            "LEAD POISONING"
-        ],
-        "loss of appetite": [
-            "TYPHOID FEVER"
-        ],
-        "diarrhea or constipation": [
-            "TYPHOID FEVER"
-        ],
-        "rash (rose spots)": [
-            "TYPHOID FEVER"
-        ],
-        "severe watery diarrhea": [
-            "CHOLERA"
-        ],
-        "dehydration": [
-            "CHOLERA",
-            "GASTROENTERITIS"
-        ],
-        "muscle cramps": [
-            "CHOLERA"
-        ],
-        "vomiting": [
-            "CHOLERA",
-            "YELLOW FEVER",
-            "EBOLA VIRUS DISEASE",
-            "GASTROENTERITIS",
-            "APPENDICITIS"
-        ],
-        "persistent cough (lasting more than 3 weeks)": [
-            "TUBERCULOSIS (TB)"
-        ],
-        "weight loss": [
-            "TUBERCULOSIS (TB)",
-            "HIV/AIDS",
-            "BRUCELLOSIS",
-            "LEISHMANIASIS",
-            "PEPTIC ULCER DISEASE"
-        ],
-        "night sweats": [
-            "TUBERCULOSIS (TB)",
-            "HIV/AIDS"
-        ],
-        "fever": [
-            "TUBERCULOSIS (TB)",
-            "YELLOW FEVER",
-            "LASSA FEVER",
-            "MENINGITIS",
-            "HIV/AIDS",
-            "RABIES",
-            "PNEUMONIA",
-            "BRUCELLOSIS",
-            "FILARIASIS",
-            "LEISHMANIASIS",
-            "INFLUENZA (FLU)",
-            "GASTROENTERITIS",
-            "SYPHILIS",
-            "HERPES SIMPLEX VIRUS (HSV)",
-            "LEPTOSPIROSIS",
-            "TONSILLITIS",
-            "CHAGAS DISEASE",
-            "OSTEOMYELITIS",
-            "APPENDICITIS",
-            "POLIO",
-            "LYMPHATIC FILARIASIS",
-            "SLEEPING SICKNESS (TRYPANOSOMIASIS)",
-            "HANTAVIRUS"
-        ],
-        "chest pain": [
-            "TUBERCULOSIS (TB)",
-            "LASSA FEVER",
-            "PNEUMONIA",
-            "HYPERTENSION (HIGH BLOOD PRESSURE)"
-        ],
-        "jaundice (yellowing of skin and eyes)": [
-            "HEPATITIS B"
-        ],
-        "dark urine": [
-            "HEPATITIS B",
-            "HEPATITIS C"
-        ],
-        "jaundice": [
-            "YELLOW FEVER",
-            "HEPATITIS C",
-            "LEPTOSPIROSIS"
-        ],
-        "bleeding from gums or nose": [
-            "YELLOW FEVER"
-        ],
-        "sore throat": [
-            "LASSA FEVER",
-            "INFLUENZA (FLU)",
-            "TONSILLITIS"
-        ],
-        "bleeding (nose": [
-            "LASSA FEVER"
-        ],
-        "gums)": [
-            "LASSA FEVER"
-        ],
-        "shock in severe cases": [
-            "LASSA FEVER"
-        ],
-        "stiff neck": [
-            "MENINGITIS"
-        ],
-        "severe headache": [
-            "MENINGITIS",
-            "EBOLA VIRUS DISEASE",
-            "STROKE"
-        ],
-        "sensitivity to light": [
-            "MENINGITIS"
-        ],
-        "confusion": [
-            "MENINGITIS",
-            "RABIES",
-            "SLEEPING SICKNESS (TRYPANOSOMIASIS)"
-        ],
-        "runny nose": [
-            "MEASLES",
-            "PERTUSSIS (WHOOPING COUGH)"
-        ],
-        "cough": [
-            "MEASLES",
-            "INFLUENZA (FLU)"
-        ],
-        "red eyes": [
-            "MEASLES"
-        ],
-        "rash that spreads from the face downwards": [
-            "MEASLES"
-        ],
-        "swollen lymph nodes": [
-            "HIV/AIDS",
-            "SYPHILIS",
-            "HERPES SIMPLEX VIRUS (HSV)",
-            "SLEEPING SICKNESS (TRYPANOSOMIASIS)"
-        ],
-        "chronic diarrhea": [
-            "HIV/AIDS"
-        ],
-        "skin rashes": [
-            "HIV/AIDS"
-        ],
-        "diarrhea": [
-            "EBOLA VIRUS DISEASE",
-            "GASTROENTERITIS"
-        ],
-        "internal and external bleeding": [
-            "EBOLA VIRUS DISEASE"
-        ],
-        "bloody urine": [
-            "SCHISTOSOMIASIS (BILHARZIA)"
-        ],
-        "enlarged liver and spleen": [
-            "SCHISTOSOMIASIS (BILHARZIA)"
-        ],
-        "itchy skin rash": [
-            "SCHISTOSOMIASIS (BILHARZIA)"
-        ],
-        "skin rash": [
-            "ONCHOCERCIASIS (RIVER BLINDNESS)"
-        ],
-        "intense itching": [
-            "ONCHOCERCIASIS (RIVER BLINDNESS)",
-            "SCABIES"
-        ],
-        "nodules under the skin": [
-            "ONCHOCERCIASIS (RIVER BLINDNESS)"
-        ],
-        "progressive blindness": [
-            "ONCHOCERCIASIS (RIVER BLINDNESS)"
-        ],
-        "skin lesions": [
-            "LEPROSY"
-        ],
-        "loss of sensation in affected areas": [
-            "LEPROSY"
-        ],
-        "nerve damage": [
-            "LEPROSY"
-        ],
-        "muscle weakness": [
-            "LEPROSY",
-            "POLIO"
-        ],
-        "hydrophobia (fear of water)": [
-            "RABIES"
-        ],
-        "muscle spasms": [
-            "RABIES"
-        ],
-        "paralysis": [
-            "RABIES",
-            "POLIO"
-        ],
-        "severe joint and muscle pain": [
-            "DENGUE FEVER"
-        ],
-        "rash": [
-            "DENGUE FEVER"
-        ],
-        "bleeding gums": [
-            "DENGUE FEVER"
-        ],
-        "severe pain episodes": [
-            "SICKLE CELL DISEASE"
-        ],
-        "anemia": [
-            "SICKLE CELL DISEASE",
-            "LEAD POISONING"
-        ],
-        "swelling in hands and feet": [
-            "SICKLE CELL DISEASE"
-        ],
-        "frequent infections": [
-            "SICKLE CELL DISEASE"
-        ],
-        "vision problems": [
-            "SICKLE CELL DISEASE"
-        ],
-        "cough with phlegm": [
-            "PNEUMONIA"
-        ],
-        "difficulty breathing": [
-            "PNEUMONIA"
-        ],
-        "joint pain": [
-            "BRUCELLOSIS"
-        ],
-        "muscle aches": [
-            "BRUCELLOSIS",
-            "LEPTOSPIROSIS",
-            "HANTAVIRUS"
-        ],
-        "swelling of limbs (elephantiasis)": [
-            "FILARIASIS"
-        ],
-        "skin thickening": [
-            "FILARIASIS",
-            "LYMPHATIC FILARIASIS"
-        ],
-        "rashes": [
-            "FILARIASIS",
-            "SYPHILIS"
-        ],
-        "skin sores": [
-            "LEISHMANIASIS"
-        ],
-        "swollen liver and spleen": [
-            "LEISHMANIASIS"
-        ],
-        "body aches": [
-            "INFLUENZA (FLU)"
-        ],
-        "congestion": [
-            "INFLUENZA (FLU)"
-        ],
-        "often asymptomatic": [
-            "HYPERTENSION (HIGH BLOOD PRESSURE)"
-        ],
-        "but can cause headaches": [
-            "HYPERTENSION (HIGH BLOOD PRESSURE)"
-        ],
-        "dizziness": [
-            "HYPERTENSION (HIGH BLOOD PRESSURE)"
-        ],
-        "blurred vision": [
-            "HYPERTENSION (HIGH BLOOD PRESSURE)",
-            "DIABETES MELLITUS"
-        ],
-        "frequent urination": [
-            "DIABETES MELLITUS"
-        ],
-        "increased thirst": [
-            "DIABETES MELLITUS"
-        ],
-        "unexplained weight loss": [
-            "DIABETES MELLITUS"
-        ],
-        "stomach cramps": [
-            "GASTROENTERITIS"
-        ],
-        "shortness of breath": [
-            "ASTHMA",
-            "HANTAVIRUS"
-        ],
-        "wheezing": [
-            "ASTHMA"
-        ],
-        "chest tightness": [
-            "ASTHMA"
-        ],
-        "chronic cough": [
-            "ASTHMA"
-        ],
-        "burning stomach pain": [
-            "PEPTIC ULCER DISEASE"
-        ],
-        "bloating": [
-            "PEPTIC ULCER DISEASE"
-        ],
-        "eye irritation": [
-            "TRACHOMA"
-        ],
-        "watery discharge": [
-            "TRACHOMA"
-        ],
-        "redness": [
-            "TRACHOMA",
-            "OSTEOMYELITIS"
-        ],
-        "blindness in severe cases": [
-            "TRACHOMA"
-        ],
-        "painless sores": [
-            "SYPHILIS"
-        ],
-        "painful urination": [
-            "GONORRHEA"
-        ],
-        "discharge": [
-            "GONORRHEA"
-        ],
-        "pelvic pain": [
-            "GONORRHEA"
-        ],
-        "swollen testicles in men": [
-            "GONORRHEA"
-        ],
-        "painful blisters around the mouth or genitals": [
-            "HERPES SIMPLEX VIRUS (HSV)"
-        ],
-        "kidney failure in severe cases": [
-            "LEPTOSPIROSIS",
-            "HANTAVIRUS"
-        ],
-        "circular red rashes": [
-            "DERMATOPHYTOSIS (RINGWORM)"
-        ],
-        "itching": [
-            "DERMATOPHYTOSIS (RINGWORM)"
-        ],
-        "hair loss (in scalp infections)": [
-            "DERMATOPHYTOSIS (RINGWORM)"
-        ],
-        "red burrow tracks on skin": [
-            "SCABIES"
-        ],
-        "skin inflammation": [
-            "SCABIES"
-        ],
-        "muscle stiffness": [
-            "TETANUS"
-        ],
-        "spasms": [
-            "TETANUS"
-        ],
-        "jaw lock": [
-            "TETANUS"
-        ],
-        "difficulty swallowing": [
-            "TETANUS",
-            "TONSILLITIS"
-        ],
-        "severe coughing fits": [
-            "PERTUSSIS (WHOOPING COUGH)"
-        ],
-        "vomiting after coughing": [
-            "PERTUSSIS (WHOOPING COUGH)"
-        ],
-        "swollen tonsils": [
-            "TONSILLITIS"
-        ],
-        "sudden numbness": [
-            "STROKE"
-        ],
-        "slurred speech": [
-            "STROKE"
-        ],
-        "difficulty walking": [
-            "STROKE"
-        ],
-        "developmental delays in children": [
-            "LEAD POISONING"
-        ],
-        "irritability": [
-            "LEAD POISONING"
-        ],
-        "swelling at the bite site": [
-            "CHAGAS DISEASE"
-        ],
-        "heart failure in chronic cases": [
-            "CHAGAS DISEASE"
-        ],
-        "bone pain": [
-            "OSTEOMYELITIS"
-        ],
-        "swelling over affected bone": [
-            "OSTEOMYELITIS"
-        ],
-        "sudden right lower abdominal pain": [
-            "APPENDICITIS"
-        ],
-        "swollen limbs (elephantiasis)": [
-            "LYMPHATIC FILARIASIS"
-        ],
-        "sleep disturbances": [
-            "SLEEPING SICKNESS (TRYPANOSOMIASIS)"
-        ],
-        "painless ulcer": [
-            "BURULI ULCER"
-        ],
-        "swelling": [
-            "BURULI ULCER"
-        ],
-        "tissue destruction": [
-            "BURULI ULCER"
-        ]
+    {
+      "name": "## 1. MALARIA",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
     },
-    "diagnosis_methods": {
-        "MALARIA": "Blood smear test, Rapid Diagnostic Test (RDT), Polymerase Chain Reaction (PCR).",
-        "TYPHOID FEVER": "Widal test, blood culture, stool and urine analysis.",
-        "CHOLERA": "Stool culture, Rapid Cholera Dipstick Test.",
-        "TUBERCULOSIS (TB)": "Tuberculin skin test (Mantoux), sputum smear microscopy, chest X-ray, GeneXpert test.",
-        "HEPATITIS B": "Blood test for Hepatitis B surface antigen (HBsAg), liver function tests.",
-        "YELLOW FEVER": "Blood test for yellow fever virus (PCR or ELISA test).",
-        "LASSA FEVER": "Lassa virus blood test (PCR), ELISA test.",
-        "MENINGITIS": "Lumbar puncture (spinal tap), blood tests, CT scan.",
-        "MEASLES": "Clinical observation, blood test for measles IgM antibodies.",
-        "HIV/AIDS": "HIV rapid test, ELISA test, CD4 count.",
-        "EBOLA VIRUS DISEASE": "PCR test for Ebola virus.",
-        "SCHISTOSOMIASIS (BILHARZIA)": "Urine or stool microscopy, blood test.",
-        "ONCHOCERCIASIS (RIVER BLINDNESS)": "Skin snip test, blood test.",
-        "LEPROSY": "Skin biopsy, clinical examination.",
-        "RABIES": "Skin biopsy, saliva test, cerebrospinal fluid analysis.",
-        "DENGUE FEVER": "Blood test for dengue virus.",
-        "SICKLE CELL DISEASE": "Blood test, hemoglobin electrophoresis.",
-        "PNEUMONIA": "Chest X-ray, sputum test, blood test.",
-        "BRUCELLOSIS": "Blood test, culture test.",
-        "FILARIASIS": "Blood smear test.",
-        "LEISHMANIASIS": "Tissue biopsy, blood test.",
-        "INFLUENZA (FLU)": "Rapid influenza diagnostic test (RIDT), PCR test.",
-        "HYPERTENSION (HIGH BLOOD PRESSURE)": "Blood pressure measurement.",
-        "DIABETES MELLITUS": "Blood glucose test, HbA1c test.",
-        "GASTROENTERITIS": "Stool sample test.",
-        "ASTHMA": "Pulmonary function test (Spirometry), peak flow measurement.",
-        "PEPTIC ULCER DISEASE": "Endoscopy, H. pylori test.",
-        "HEPATITIS C": "Blood test for Hepatitis C antibodies.",
-        "TRACHOMA": "Clinical eye examination, PCR test.",
-        "SYPHILIS": "Blood test (VDRL, RPR test).",
-        "GONORRHEA": "Urine test, swab test.",
-        "HERPES SIMPLEX VIRUS (HSV)": "Blood test, PCR test.",
-        "LEPTOSPIROSIS": "Blood or urine culture.",
-        "DERMATOPHYTOSIS (RINGWORM)": "Skin scraping test.",
-        "SCABIES": "Skin scraping test.",
-        "TETANUS": "Clinical examination.",
-        "PERTUSSIS (WHOOPING COUGH)": "Nasopharyngeal swab test.",
-        "TONSILLITIS": "Throat swab test.",
-        "STROKE": "CT scan, MRI.",
-        "LEAD POISONING": "Blood lead level test.",
-        "CHAGAS DISEASE": "Blood test, PCR test.",
-        "OSTEOMYELITIS": "MRI, bone biopsy.",
-        "APPENDICITIS": "Abdominal ultrasound, CT scan.",
-        "POLIO": "Stool or throat culture.",
-        "LYMPHATIC FILARIASIS": "Blood smear test.",
-        "SLEEPING SICKNESS (TRYPANOSOMIASIS)": "Blood test, lumbar puncture.",
-        "HANTAVIRUS": "Blood test.",
-        "BURULI ULCER": "PCR test, biopsy."
+    {
+      "name": "## 2. TYPHOID FEVER",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
     },
-    "treatments": {
-        "MALARIA": "Antimalarial drugs (Artemisinin-based Combination Therapy - ACT), supportive care for fever and dehydration.",
-        "TYPHOID FEVER": "Antibiotics (Ciprofloxacin, Azithromycin), hydration therapy.",
-        "CHOLERA": "Oral Rehydration Therapy (ORT), intravenous fluids, antibiotics (Doxycycline, Azithromycin).",
-        "TUBERCULOSIS (TB)": "6-month course of antibiotics (Rifampin, Isoniazid, Ethambutol, Pyrazinamide).",
-        "HEPATITIS B": "Antiviral medications (Tenofovir, Entecavir), liver monitoring, supportive therapy.",
-        "YELLOW FEVER": "Supportive care (fluids, pain relievers, rest). Preventable by vaccination.",
-        "LASSA FEVER": "Ribavirin antiviral therapy, supportive care.",
-        "MENINGITIS": "Antibiotics for bacterial meningitis, antiviral treatment for viral meningitis, corticosteroids to reduce inflammation.",
-        "MEASLES": "Supportive care (fluids, fever reducers, vitamin A supplements). Preventable by vaccination.",
-        "HIV/AIDS": "Antiretroviral therapy (ART) to manage the virus and prevent complications.",
-        "EBOLA VIRUS DISEASE": "Supportive care, rehydration therapy, experimental monoclonal antibody treatments.",
-        "SCHISTOSOMIASIS (BILHARZIA)": "Praziquantel (antiparasitic medication).",
-        "ONCHOCERCIASIS (RIVER BLINDNESS)": "Ivermectin (antiparasitic drug), doxycycline for secondary infections.",
-        "LEPROSY": "Multi-drug therapy (MDT) with Rifampin, Dapsone, and Clofazimine.",
-        "RABIES": "No cure after symptom onset, but rabies vaccine and immunoglobulin prevent onset if given immediately after exposure.",
-        "DENGUE FEVER": "Supportive care (fluids, pain relievers like acetaminophen). Preventable by mosquito control.",
-        "SICKLE CELL DISEASE": "Pain management, blood transfusions, hydroxyurea therapy.",
-        "PNEUMONIA": "Antibiotics for bacterial pneumonia, antivirals for viral pneumonia, oxygen therapy if needed.",
-        "BRUCELLOSIS": "Antibiotics (Doxycycline and Rifampin for six weeks).",
-        "FILARIASIS": "Antiparasitic drugs (Diethylcarbamazine, Ivermectin).",
-        "LEISHMANIASIS": "Antimonial drugs, Amphotericin B.",
-        "INFLUENZA (FLU)": "Antiviral medications (Oseltamivir, Zanamivir), rest, hydration.",
-        "HYPERTENSION (HIGH BLOOD PRESSURE)": "Lifestyle changes (diet, exercise), antihypertensive medications.",
-        "DIABETES MELLITUS": "Insulin therapy (for Type 1), oral hypoglycemic drugs (for Type 2), dietary management.",
-        "GASTROENTERITIS": "Fluid replacement, antibiotics if bacterial infection is confirmed.",
-        "ASTHMA": "Inhalers (Bronchodilators like Salbutamol), corticosteroids.",
-        "PEPTIC ULCER DISEASE": "Proton pump inhibitors (Omeprazole), antibiotics for H. pylori.",
-        "HEPATITIS C": "Antiviral medications (Sofosbuvir, Ledipasvir).",
-        "TRACHOMA": "Antibiotics (Azithromycin), improved hygiene practices.",
-        "SYPHILIS": "Penicillin injections.",
-        "GONORRHEA": "Antibiotics (Ceftriaxone, Azithromycin).",
-        "HERPES SIMPLEX VIRUS (HSV)": "Antiviral drugs (Acyclovir, Valacyclovir).",
-        "LEPTOSPIROSIS": "Antibiotics (Doxycycline, Penicillin).",
-        "DERMATOPHYTOSIS (RINGWORM)": "Antifungal creams, oral antifungal medications.",
-        "SCABIES": "Topical Permethrin cream, Ivermectin for severe cases.",
-        "TETANUS": "Tetanus vaccine, antibiotics, muscle relaxants.",
-        "PERTUSSIS (WHOOPING COUGH)": "Antibiotics (Azithromycin, Erythromycin).",
-        "TONSILLITIS": "Pain relievers, antibiotics if bacterial.",
-        "STROKE": "Clot-busting drugs (for ischemic stroke), blood pressure control.",
-        "LEAD POISONING": "Chelation therapy.",
-        "CHAGAS DISEASE": "Antiparasitic drugs (Benznidazole, Nifurtimox).",
-        "OSTEOMYELITIS": "IV antibiotics, surgery if severe.",
-        "APPENDICITIS": "Surgical removal (Appendectomy).",
-        "POLIO": "No cure, supportive therapy, preventable with polio vaccine.",
-        "LYMPHATIC FILARIASIS": "Antiparasitic drugs (Ivermectin, Albendazole).",
-        "SLEEPING SICKNESS (TRYPANOSOMIASIS)": "Antitrypanosomal drugs (Suramin, Melarsoprol).",
-        "HANTAVIRUS": "Supportive care.",
-        "BURULI ULCER": "Antibiotics (Rifampin, Streptomycin)."
+    {
+      "name": "## 3. CHOLERA",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 4. TUBERCULOSIS (TB)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 5. HEPATITIS B",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 6. YELLOW FEVER",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 7. LASSA FEVER",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 8. MENINGITIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 9. DIARRHEAL DISEASES (E.G. ROTAVIRUS, E. COLI INFECTION)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 10. MEASLES",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 11. HIV/AIDS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 12. EBOLA VIRUS DISEASE",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 13. SCHISTOSOMIASIS (BILHARZIA)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 14. ONCHOCERCIASIS (RIVER BLINDNESS)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 15. LEPROSY",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 16. RABIES",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 17. DENGUE FEVER",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 18. SICKLE CELL DISEASE",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "(\u2026 additional diseases continue in full file \u2026)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 19. PNEUMONIA",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 20. BRUCELLOSIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 21. FILARIASIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 22. LEISHMANIASIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 23. INFLUENZA (FLU)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 24. HYPERTENSION (HIGH BLOOD PRESSURE)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 25. DIABETES MELLITUS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 26. GASTROENTERITIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 27. ASTHMA",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 28. PEPTIC ULCER DISEASE",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 29. HEPATITIS C",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 30. TRACHOMA",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 31. SYPHILIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 32. GONORRHEA",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 33. HERPES SIMPLEX VIRUS (HSV)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 34. LEPTOSPIROSIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 35. DERMATOPHYTOSIS (RINGWORM)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 36. SCABIES",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 37. TETANUS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 38. PERTUSSIS (WHOOPING COUGH)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 39. DYSENTERY (AMOEBIC & BACTERIAL)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 40. TONSILLITIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 41. STROKE",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 42. LEAD POISONING",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 43. CHAGAS DISEASE",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 44. OSTEOMYELITIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 45. APPENDICITIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 46. POLIO",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 47. LYMPHATIC FILARIASIS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 48. SLEEPING SICKNESS (TRYPANOSOMIASIS)",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 49. HANTAVIRUS",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
+    },
+    {
+      "name": "## 50. BURULI ULCER",
+      "symptoms": [],
+      "treatment": "",
+      "description": "",
+      "confidence": 0.8
     }
+  ]
 }

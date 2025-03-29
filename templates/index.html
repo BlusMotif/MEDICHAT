@@ -1,161 +1,87 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
+{% block title %}Medi Chat - Your Personal Medical Assistant{% endblock %}
 
 {% block content %}
-<!-- Main chat area -->
-<main class="row flex-grow-1 overflow-hidden">
-    <div class="col-12 h-100 d-flex flex-column">
-        <!-- Chat messages area -->
-        <div id="chatMessages" class="flex-grow-1 p-3 overflow-auto">
-            <div class="d-flex justify-content-center my-4">
-                <div class="alert alert-info text-center fw-bold">
-                    <i class="fas fa-info-circle me-2"></i>
-                    This chatbot provides general information only and is not a substitute for professional medical advice.
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-lg border-0 fade-in mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Medi Chat</h4>
+            </div>
+            <div class="card-body">
+                <!-- Chat messages container -->
+                <div class="chat-container" id="chatContainer">
+                    <!-- Messages will be added here dynamically -->
                 </div>
-            </div>
-            <!-- Messages will be added here by JavaScript -->
-        </div>
-        
-        <!-- Input area -->
-        <div id="chatInputArea" class="p-3 border-top">
-            <form id="messageForm" class="d-flex">
-                <input type="text" id="userInput" class="form-control me-2" placeholder="Describe your symptoms..." autocomplete="off">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </form>
-            <div class="mt-2">
-                <p class="mb-1 small fw-bold text-emphasis">Common symptoms:</p>
-                <div class="d-flex flex-wrap gap-1">
-                    <button class="btn btn-sm quick-symptom">High Fever</button>
-                    <button class="btn btn-sm quick-symptom">Chills</button>
-                    <button class="btn btn-sm quick-symptom">Sweating</button>
-                    <button class="btn btn-sm quick-symptom">Headache</button>
-                    <button class="btn btn-sm quick-symptom">Nausea</button>
-                    <button class="btn btn-sm quick-symptom">Jaundice</button>
-                    <button class="btn btn-sm quick-symptom">Abdominal Pain</button>
-                    <button class="btn btn-sm quick-symptom">Diarrhea</button>
-                    <button class="btn btn-sm quick-symptom">Fatigue</button>
-                    <button class="btn btn-sm quick-symptom">Rash</button>
+                
+                <!-- Typing indicator -->
+                <div class="bot-message typing-indicator-container d-none" id="typingIndicator">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </div>
-                <div class="d-flex flex-wrap gap-1 mt-1">
-                    <button class="btn btn-sm quick-symptom">Joint Pain</button>
-                    <button class="btn btn-sm quick-symptom">Vomiting</button>
-                    <button class="btn btn-sm quick-symptom">Bloody Urine</button>
-                    <button class="btn btn-sm quick-symptom">Convulsions</button>
-                    <button class="btn btn-sm quick-symptom">Muscle Aches</button>
-                    <button class="btn btn-sm quick-symptom">Cough</button>
-                    <button class="btn btn-sm quick-symptom">Weight Loss</button>
-                    <button class="btn btn-sm quick-symptom">Night Sweats</button>
-                    <button class="btn btn-sm quick-symptom">Sore Throat</button>
-                    <button class="btn btn-sm quick-symptom">Enlarged Liver</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-<!-- Typing indicator -->
-<div id="typingIndicator" class="typing-indicator d-none">
-    <div class="typing-bubble"></div>
-    <div class="typing-bubble"></div>
-    <div class="typing-bubble"></div>
-</div>
-
-<!-- Welcome Modal -->
-<div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="welcomeModalLabel">Welcome to Medi Chat</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Medi Chat is an AI-powered chatbot designed to help you understand potential causes for your symptoms based on a comprehensive medical knowledge base.</p>
                 
-                <p class="fw-bold">How to use Medi Chat:</p>
-                <ol>
-                    <li>Describe your symptoms in detail</li>
-                    <li>Answer follow-up questions to provide more context</li>
-                    <li>Receive potential causes and treatment recommendations</li>
-                </ol>
+                <!-- Input form -->
+                <form id="chatForm" class="mt-3">
+                    <div class="input-group">
+                        <input type="text" id="userMessage" class="form-control" placeholder="Type your symptoms here..." required>
+                        <button type="submit" class="btn btn-primary pulse-animation">
+                            <i class="bi bi-send"></i> Send
+                        </button>
+                    </div>
+                </form>
                 
-                <p class="fw-bold mt-3">Medical Knowledge:</p>
-                <p>This chatbot has been specially trained with information about common diseases such as:</p>
-                <ul class="mb-3">
-                    <li>Malaria</li>
-                    <li>Typhoid Fever</li>
-                    <li>Yellow Fever</li>
-                    <li>Trypanosomiasis</li>
-                    <li>And many more medical conditions</li>
-                </ul>
-                
-                <div class="alert alert-warning">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    Important: This is not a replacement for professional medical advice. Always consult with a healthcare professional for proper diagnosis and treatment.
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Get Started</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Admin Panel Modal -->
-<div class="modal fade" id="adminModal" tabindex="-1" aria-labelledby="adminModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="adminModalLabel">Admin Panel</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h6>Medical Knowledge Base</h6>
-                <p class="text-emphasis">Process the medical text file to enhance the chatbot's knowledge base.</p>
-                
-                <div class="mb-3 d-flex gap-2">
-                    <button id="processAfricanDiseasesBtn" class="btn btn-success fw-bold">
-                        Process Medical Text
+                <!-- Reset conversation button -->
+                <div class="text-center mt-3">
+                    <button id="resetConversation" class="btn btn-outline-secondary btn-sm pulse-animation">
+                        <i class="bi bi-arrow-counterclockwise"></i> Reset Conversation
                     </button>
                 </div>
-                
-                <div id="africanDiseasesStatus" class="d-none">
-                    <div class="alert alert-info">
-                        <div class="d-flex align-items-center">
-                            <div class="spinner-border spinner-border-sm me-2" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            <span class="fw-bold" id="africanDiseasesStatusText">Processing medical text file...</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="africanDiseasesComplete" class="d-none">
-                    <div class="alert alert-success">
-                        <i class="fas fa-check-circle me-2"></i>
-                        Medical text processing complete! The chatbot now has better knowledge of common diseases.
-                    </div>
-                </div>
-                
-                <div id="africanDiseasesError" class="d-none">
-                    <div class="alert alert-danger">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        <span id="africanDiseasesErrorMessage">An error occurred during medical text processing.</span>
-                    </div>
-                </div>
-                
-                <hr>
-                
-                <h6 class="fw-bold">Current Knowledge Base</h6>
-                <p class="text-emphasis">The chatbot currently understands:</p>
-                <ul class="fw-semibold">
-                    <li>Total Symptoms: <span id="symptomCount" class="text-primary">...</span></li>
-                    <li>Total Medical Conditions: <span id="conditionCount" class="text-primary">...</span></li>
-                    <li>Regional Diseases: <span id="africanDiseaseCount" class="text-success">...</span></li>
-                </ul>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="card-footer">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <span class="badge bg-info">Info</span> Please describe at least 3 symptoms for accurate assessment.
+                    </div>
+                    <div class="ms-auto">
+                        {% if current_user.is_authenticated %}
+                            <small class="text-muted">Logged in as: {{ current_user.username }}</small>
+                        {% else %}
+                            <small><a href="{{ url_for('login') }}">Login</a> to save your chat history</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Information cards -->
+        <div class="row fade-in">
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Symptom Analysis</h5>
+                        <p class="card-text">Our system analyzes your symptoms using advanced natural language processing to identify potential health conditions.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Medical Knowledge</h5>
+                        <p class="card-text">Powered by comprehensive medical data covering a wide range of health conditions and their symptoms.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Treatment Information</h5>
+                        <p class="card-text">Get information about potential treatments for identified conditions, always consult a healthcare professional.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -163,7 +89,124 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- Custom JS -->
-<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
-<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatContainer = document.getElementById('chatContainer');
+        const chatForm = document.getElementById('chatForm');
+        const userMessage = document.getElementById('userMessage');
+        const resetButton = document.getElementById('resetConversation');
+        const typingIndicator = document.getElementById('typingIndicator');
+        
+        // Function to add message to the chat
+        function addMessage(message, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = sender === 'user' ? 'user-message' : 'bot-message';
+            
+            if (sender === 'bot') {
+                messageDiv.innerHTML = formatBotMessage(message);
+            } else {
+                messageDiv.textContent = message;
+            }
+            
+            // Add timestamp
+            const timestamp = document.createElement('div');
+            timestamp.className = 'message-time';
+            timestamp.textContent = getFormattedTime();
+            messageDiv.appendChild(timestamp);
+            
+            chatContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+        
+        // Format bot message (process HTML)
+        function formatBotMessage(message) {
+            return message;
+        }
+        
+        // Show typing indicator
+        function showTypingIndicator() {
+            typingIndicator.classList.remove('d-none');
+            chatContainer.appendChild(typingIndicator);
+            scrollToBottom();
+        }
+        
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            typingIndicator.classList.add('d-none');
+        }
+        
+        // Get formatted time
+        function getFormattedTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            
+            return `${hours}:${minutes} ${ampm}`;
+        }
+        
+        // Scroll chat to bottom
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Send message to server
+        function sendMessage(message) {
+            fetch('/get_response', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                hideTypingIndicator();
+                addMessage(data.response, 'bot');
+            })
+            .catch(error => {
+                hideTypingIndicator();
+                addMessage('Sorry, there was an error processing your request. Please try again.', 'bot');
+                console.error('Error:', error);
+            });
+        }
+        
+        // Handle form submission
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const message = userMessage.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                userMessage.value = '';
+                showTypingIndicator();
+                sendMessage(message);
+            }
+        });
+        
+        // Handle reset button
+        resetButton.addEventListener('click', function() {
+            fetch('/reset_conversation', {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    chatContainer.innerHTML = '';
+                    addMessage('Conversation has been reset. How can I help you today?', 'bot');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+        
+        // Initial greeting
+        sendMessage('');
+    });
+</script>
 {% endblock %}

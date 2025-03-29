@@ -1,11 +1,10 @@
+import json
 import os
 import re
-import json
 import logging
-from pathlib import Path
 from typing import Dict, List, Set, Optional
 
-# Set up logging
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -20,12 +19,7 @@ class MedicalTextProcessor:
             text_file_path: Path to the text file containing disease information
         """
         self.text_file_path = text_file_path
-        self.disease_data = {
-            "diseases": {},
-            "symptoms": {},
-            "diagnosis_methods": {},
-            "treatments": {}
-        }
+        self.disease_data = {}
     
     def process_text_file(self) -> Dict:
         """
@@ -35,53 +29,82 @@ class MedicalTextProcessor:
             Dictionary containing structured disease information
         """
         try:
-            if not os.path.exists(self.text_file_path):
-                logger.error(f"Text file not found: {self.text_file_path}")
-                return self.disease_data
-            
             with open(self.text_file_path, 'r', encoding='utf-8') as file:
                 content = file.read()
+                
+                # Split the content by disease sections (assumption: diseases are separated by double newlines)
+                disease_sections = re.split(r'\n\s*\n', content)
+                
+                for section in disease_sections:
+                    if not section.strip():
+                        continue
+                    
+                    # Parse the disease section
+                    lines = section.strip().split('\n')
+                    if not lines:
+                        continue
+                    
+                    # First line should be the disease name
+                    disease_name = lines[0].strip()
+                    if not disease_name:
+                        continue
+                    
+                    disease_info = {
+                        "symptoms": [],
+                        "treatment": "",
+                        "description": ""
+                    }
+                    
+                    current_section = None
+                    
+                    for line in lines[1:]:
+                        line = line.strip()
+                        if not line:
+                            continue
+                        
+                        # Check if this is a section header
+                        if line.lower().startswith("symptoms:"):
+                            current_section = "symptoms"
+                            # Extract symptoms from the same line if they exist
+                            symptoms_text = line[len("symptoms:"):].strip()
+                            if symptoms_text:
+                                symptoms = [s.strip() for s in symptoms_text.split(',')]
+                                disease_info["symptoms"].extend(symptoms)
+                        elif line.lower().startswith("treatment:"):
+                            current_section = "treatment"
+                            # Extract treatment from the same line if it exists
+                            treatment_text = line[len("treatment:"):].strip()
+                            if treatment_text:
+                                disease_info["treatment"] = treatment_text
+                        elif line.lower().startswith("description:"):
+                            current_section = "description"
+                            # Extract description from the same line if it exists
+                            description_text = line[len("description:"):].strip()
+                            if description_text:
+                                disease_info["description"] = description_text
+                        else:
+                            # Continue with the current section
+                            if current_section == "symptoms":
+                                # Symptoms might be comma-separated
+                                symptoms = [s.strip() for s in line.split(',')]
+                                disease_info["symptoms"].extend(symptoms)
+                            elif current_section == "treatment":
+                                disease_info["treatment"] += " " + line
+                            elif current_section == "description":
+                                disease_info["description"] += " " + line
+                    
+                    # Clean up symptoms (remove empty strings)
+                    disease_info["symptoms"] = [s for s in disease_info["symptoms"] if s]
+                    
+                    # Add the disease to our data dictionary
+                    self.disease_data[disease_name] = disease_info
             
-            # Extract disease sections using regex
-            disease_pattern = r'## \d+\. ([A-Z\s()/-]+)\n- \*\*Symptoms\*\*: (.*?)\n- \*\*Diagnosis\*\*: (.*?)\n- \*\*Treatment\*\*: (.*?)(?:\n\n|\n##|\Z)'
-            disease_matches = re.findall(disease_pattern, content, re.DOTALL)
-            
-            for match in disease_matches:
-                disease_name = match[0].strip()
-                symptoms_text = match[1].strip()
-                diagnosis_text = match[2].strip()
-                treatment_text = match[3].strip()
-                
-                # Process symptoms into a list
-                symptoms = [s.strip() for s in re.split(r',|\.', symptoms_text) if s.strip()]
-                
-                # Add to disease data
-                self.disease_data["diseases"][disease_name] = {
-                    "symptoms": symptoms,
-                    "diagnosis": diagnosis_text,
-                    "treatment": treatment_text
-                }
-                
-                # Create symptom to disease mapping
-                for symptom in symptoms:
-                    symptom = symptom.lower()
-                    if symptom not in self.disease_data["symptoms"]:
-                        self.disease_data["symptoms"][symptom] = []
-                    if disease_name not in self.disease_data["symptoms"][symptom]:
-                        self.disease_data["symptoms"][symptom].append(disease_name)
-                
-                # Add diagnosis methods
-                self.disease_data["diagnosis_methods"][disease_name] = diagnosis_text
-                
-                # Add treatments
-                self.disease_data["treatments"][disease_name] = treatment_text
-            
-            logger.info(f"Successfully processed {len(self.disease_data['diseases'])} diseases from text file")
+            logger.info(f"Successfully processed {len(self.disease_data)} diseases from text file")
             return self.disease_data
             
         except Exception as e:
             logger.error(f"Error processing text file: {str(e)}")
-            return self.disease_data
+            return {}
     
     def save_to_json(self, output_path: Optional[str] = None) -> bool:
         """
@@ -93,17 +116,18 @@ class MedicalTextProcessor:
         Returns:
             Boolean indicating success or failure
         """
+        if not self.disease_data:
+            logger.warning("No disease data to save")
+            return False
+        
         try:
+            # If no output path provided, use a default
             if not output_path:
-                # Use default path in static/data directory
-                default_path = Path(__file__).parent / "static" / "data" / "medical_data.json"
-                output_path = str(default_path)
-            
-            # Ensure directory exists
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+                os.makedirs('static/data', exist_ok=True)
+                output_path = 'static/data/diseases.json'
             
             with open(output_path, 'w', encoding='utf-8') as file:
-                json.dump(self.disease_data, file, indent=4)
+                json.dump(self.disease_data, file, indent=2)
             
             logger.info(f"Successfully saved disease data to {output_path}")
             return True
@@ -124,64 +148,18 @@ class MedicalTextProcessor:
         """
         try:
             if not os.path.exists(existing_data_path):
-                logger.warning(f"Existing data file not found: {existing_data_path}")
+                logger.warning(f"Existing data file {existing_data_path} not found")
                 return self.disease_data
             
             with open(existing_data_path, 'r', encoding='utf-8') as file:
                 existing_data = json.load(file)
             
-            # Merge symptoms
-            for symptom, diseases in self.disease_data["symptoms"].items():
-                if symptom in existing_data["symptoms"]:
-                    # Add new diseases to existing symptom
-                    for disease in diseases:
-                        if disease not in existing_data["symptoms"][symptom]:
-                            existing_data["symptoms"][symptom].append(disease)
-                else:
-                    # Add new symptom
-                    existing_data["symptoms"][symptom] = diseases
+            # Merge the data
+            merged_data = {**existing_data, **self.disease_data}
             
-            # Merge conditions/diseases
-            for disease, info in self.disease_data["diseases"].items():
-                if disease in existing_data.get("conditions", {}):
-                    # Update existing disease with new information
-                    existing_data["conditions"][disease].extend([info["treatment"]])
-                else:
-                    # Add new disease
-                    existing_data["conditions"][disease] = [info["treatment"]]
-            
-            # Add symptom related questions if not present in existing data
-            if "symptom_related_questions" not in existing_data:
-                existing_data["symptom_related_questions"] = {}
-            
-            # Add specific questions for common disease symptoms
-            existing_data["symptom_related_questions"]["high fever"] = [
-                "Does your fever come and go in cycles?",
-                "Do you have chills before the fever starts?",
-                "Have you been in an area with endemic diseases recently?"
-            ]
-            
-            existing_data["symptom_related_questions"]["jaundice"] = [
-                "Have you noticed yellowing of your eyes or skin?",
-                "Have you had any changes in urine color?",
-                "Do you have any pain in your abdomen?"
-            ]
-            
-            existing_data["symptom_related_questions"]["rash"] = [
-                "Where is the rash located on your body?",
-                "Is the rash itchy or painful?",
-                "Did the rash appear after taking any medication?"
-            ]
-            
-            logger.info("Successfully merged disease data with existing medical data")
-            return existing_data
+            logger.info(f"Successfully merged {len(self.disease_data)} diseases with existing data")
+            return merged_data
             
         except Exception as e:
-            logger.error(f"Error merging with existing medical data: {str(e)}")
+            logger.error(f"Error merging with existing data: {str(e)}")
             return self.disease_data
-
-# For testing
-if __name__ == "__main__":
-    processor = MedicalTextProcessor("attached_assets/Common_Diseases_Symptoms_Treatment.txt")
-    processor.process_text_file()
-    processor.save_to_json()
