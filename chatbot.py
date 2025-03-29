@@ -82,89 +82,81 @@ class DoctorChatbot:
     def load_medical_data(self):
         """Load the medical knowledge base from JSON file"""
         try:
-            data_path = Path(__file__).parent / "static" / "data" / "medical_data.json"
+            # First, try to use the african diseases JSON file if it exists
+            data_path = Path(__file__).parent / "static" / "data" / "african_diseases.json"
             
-            # If file doesn't exist yet (during development)
+            # If African diseases file doesn't exist, look for general medical data
             if not data_path.exists():
-                # Use sample data
-                medical_data = {
-                    "symptoms": {
-                        "headache": ["Tension headache", "Migraine", "Sinusitis", "Dehydration", "Eye strain", "Malaria", "Typhoid Fever"],
-                        "fever": ["Common cold", "Flu", "COVID-19", "Infection", "Inflammation", "Malaria", "Typhoid Fever", "Yellow Fever"],
-                        "cough": ["Common cold", "Bronchitis", "Asthma", "COVID-19", "Allergies", "Tuberculosis"],
-                        "sore throat": ["Strep throat", "Common cold", "Tonsillitis", "Allergies", "Acid reflux"],
-                        "runny nose": ["Common cold", "Allergies", "Sinusitis", "Flu"],
-                        "fatigue": ["Anemia", "Depression", "Sleep disorder", "Thyroid issues", "Infection", "Malaria", "Typhoid Fever"],
-                        "nausea": ["Food poisoning", "Stomach flu", "Migraine", "Pregnancy", "Motion sickness", "Malaria", "Typhoid Fever"],
-                        "dizziness": ["Low blood pressure", "Inner ear issues", "Anemia", "Dehydration", "Anxiety", "Malaria"],
-                        "chest pain": ["Heartburn", "Anxiety", "Muscle strain", "Asthma", "Heart issues", "Tuberculosis"],
-                        "shortness of breath": ["Asthma", "Anxiety", "COVID-19", "Heart issues", "Pneumonia", "Tuberculosis"],
-                        "back pain": ["Muscle strain", "Herniated disc", "Arthritis", "Kidney infection", "Poor posture"],
-                        "abdominal pain": ["Gastritis", "Food poisoning", "Irritable bowel syndrome", "Appendicitis", "Menstrual cramps", "Typhoid Fever"],
-                        "diarrhea": ["Food poisoning", "Irritable bowel syndrome", "Infection", "Food intolerance", "Medication side effect", "Typhoid Fever", "Cholera"],
-                        "constipation": ["Dehydration", "Low fiber diet", "Medication side effect", "Irritable bowel syndrome", "Thyroid issues"],
-                        "rash": ["Allergic reaction", "Eczema", "Psoriasis", "Contact dermatitis", "Fungal infection", "Typhoid Fever"],
-                        "joint pain": ["Arthritis", "Injury", "Gout", "Lupus", "Bursitis", "Malaria", "Dengue Fever"],
-                        "vomiting": ["Food poisoning", "Stomach flu", "Migraine", "Pregnancy", "Motion sickness", "Malaria", "Typhoid Fever"],
-                        "muscle pain": ["Strain", "Overuse", "Fibromyalgia", "Infection", "Medication side effect", "Malaria", "Dengue Fever"],
-                        "ear pain": ["Ear infection", "Sinus infection", "Tooth infection", "Temporomandibular joint disorder", "Water in ear"],
-                        "eye pain": ["Conjunctivitis", "Dry eye", "Foreign object", "Glaucoma", "Migraine"],
-                        "high fever": ["Malaria", "Typhoid Fever", "Yellow Fever", "Dengue Fever"],
-                        "intermittent fever": ["Malaria", "Tuberculosis"],
-                        "chills": ["Malaria", "Flu", "Infection", "Typhoid Fever"],
-                        "sweating": ["Malaria", "Infection", "Anxiety", "Thyroid issues"],
-                        "jaundice": ["Malaria", "Hepatitis", "Liver disease"],
-                        "weakness": ["Malaria", "Typhoid Fever", "Anemia", "Dehydration"]
-                    },
-                    "conditions": {
-                        "Common cold": ["rest", "fluids", "over-the-counter pain relievers", "decongestants"],
-                        "Flu": ["rest", "fluids", "antiviral medications", "fever reducers"],
-                        "COVID-19": ["isolation", "rest", "fluids", "consult healthcare provider"],
-                        "Migraine": ["rest", "dark quiet room", "pain relievers", "prescription medications"],
-                        "Allergies": ["antihistamines", "avoid allergens", "nasal sprays", "consult allergist"],
-                        "Sinusitis": ["saline nasal irrigation", "decongestants", "pain relievers", "antibiotics if bacterial"],
-                        "Tension headache": ["stress management", "pain relievers", "rest", "massage"],
-                        "Asthma": ["inhalers", "avoid triggers", "breathing exercises", "medical follow-up"],
-                        "Food poisoning": ["hydration", "bland diet", "rest", "probiotics"],
-                        "Irritable bowel syndrome": ["dietary changes", "stress management", "fiber supplements", "medications"],
-                        "Malaria": ["antimalarial medication", "rest", "fluids", "fever reducers", "immediate medical attention"],
-                        "Typhoid Fever": ["antibiotics", "rest", "fluids", "fever reducers", "seek medical care immediately"],
-                        "Yellow Fever": ["rest", "fluids", "pain relievers", "seek immediate medical attention", "no specific treatment available"],
-                        "Cholera": ["oral rehydration therapy", "antibiotics", "zinc supplements", "immediate medical care"],
-                        "Tuberculosis": ["antibiotics for 6-9 months", "rest", "proper nutrition", "medical follow-up"],
-                        "Dengue Fever": ["rest", "fluids", "pain relievers (avoid aspirin)", "seek medical care if symptoms worsen"]
-                    },
-                    "symptom_related_questions": {
-                        "headache": ["Is the headache on one side or both?", "Is it pulsating or a constant pressure?", "Does light or noise make it worse?"],
-                        "fever": ["What's your temperature?", "Do you have chills or sweating?", "How long have you had the fever?", "Does the fever come and go in cycles?"],
-                        "cough": ["Is it a dry cough or producing mucus?", "When did it start?", "Is it worse at night?", "Have you coughed up any blood?"],
-                        "abdominal pain": ["Where exactly is the pain?", "Is it sharp or dull?", "Does it come and go or is it constant?", "Is the pain worse after eating?"],
-                        "high fever": ["Does your fever spike and then go away, only to return later?", "Is the fever accompanied by severe sweating?", "How high does your temperature get?"],
-                        "intermittent fever": ["Do you notice a pattern to when the fever occurs?", "How long do the fever episodes last?", "Do you get chills before the fever starts?"],
-                        "jaundice": ["Have you noticed yellowing of your eyes?", "Has anyone mentioned that your skin looks yellow?", "Have you had any changes in urine color?"],
-                        "weakness": ["Is the weakness constant or does it come and go?", "Can you still perform your normal daily activities?", "Does rest improve the weakness?"],
-                        "chills": ["Do the chills occur before a fever?", "How severe are the chills?", "Do they come in regular patterns?"],
-                        "diarrhea": ["How many times per day?", "Is there blood or mucus in the stool?", "Is it watery or more formed?"]
-                    }
-                }
-                return medical_data
+                # Try the general medical data file
+                data_path = Path(__file__).parent / "static" / "data" / "medical_data.json"
             
+            # If no files exist yet, process the African diseases text file
+            if not data_path.exists():
+                logger.info("No knowledge base found. Processing African diseases text file.")
+                # Import required module only when needed
+                from process_african_diseases import process_african_diseases
+                process_african_diseases()
+                
+                # Check if file was created
+                if not data_path.exists():
+                    logger.warning("Failed to process African diseases. Using basic knowledge base.")
+                    # Use basic African disease data
+                    return self._get_basic_african_disease_data()
+            
+            # Load the data from file
             with open(data_path, 'r') as file:
                 return json.load(file)
+            
         except Exception as e:
             logger.error(f"Error loading medical data: {str(e)}")
-            # Return a minimal fallback dataset
-            return {
-                "symptoms": {
-                    "headache": ["Tension headache", "Migraine"],
-                    "fever": ["Common cold", "Flu"],
-                    "cough": ["Common cold", "Bronchitis"]
-                },
-                "conditions": {
-                    "Common cold": ["rest", "fluids"],
-                    "Tension headache": ["rest", "pain relievers"]
-                }
-            }
+            # Return a basic dataset focused on African diseases
+            return self._get_basic_african_disease_data()
+            
+    def _get_basic_african_disease_data(self):
+        """Return a basic dataset focused on common African diseases"""
+        return {
+            "symptoms": {
+                "high fever": ["MALARIA", "TYPHOID FEVER", "YELLOW FEVER", "DENGUE FEVER"],
+                "fever": ["MALARIA", "TYPHOID FEVER", "CHOLERA", "HEPATITIS B", "YELLOW FEVER"],
+                "chills": ["MALARIA", "TYPHOID FEVER", "YELLOW FEVER"],
+                "headache": ["MALARIA", "TYPHOID FEVER", "MENINGITIS"],
+                "sweating": ["MALARIA", "YELLOW FEVER"],
+                "nausea": ["MALARIA", "TYPHOID FEVER", "CHOLERA", "HEPATITIS B"],
+                "vomiting": ["MALARIA", "TYPHOID FEVER", "CHOLERA", "YELLOW FEVER"],
+                "fatigue": ["MALARIA", "TYPHOID FEVER", "HEPATITIS B", "HIV/AIDS"],
+                "abdominal pain": ["TYPHOID FEVER", "CHOLERA", "HEPATITIS B"],
+                "diarrhea": ["TYPHOID FEVER", "CHOLERA", "HIV/AIDS"],
+                "rash": ["TYPHOID FEVER", "MEASLES", "HIV/AIDS"],
+                "jaundice": ["HEPATITIS B", "YELLOW FEVER", "MALARIA"],
+                "muscle pain": ["MALARIA", "DENGUE FEVER", "LASSA FEVER"],
+                "stiff neck": ["MENINGITIS"],
+                "cough": ["TUBERCULOSIS", "PNEUMONIA", "INFLUENZA"],
+                "weight loss": ["TUBERCULOSIS", "HIV/AIDS"]
+            },
+            "conditions": {
+                "MALARIA": ["Antimalarial drugs (Artemisinin-based Combination Therapy - ACT)", "supportive care for fever and dehydration", "seek immediate medical attention"],
+                "TYPHOID FEVER": ["Antibiotics (Ciprofloxacin, Azithromycin)", "hydration therapy", "seek medical care immediately"],
+                "CHOLERA": ["Oral Rehydration Therapy (ORT)", "intravenous fluids", "antibiotics (Doxycycline, Azithromycin)"],
+                "TUBERCULOSIS": ["6-month course of antibiotics (Rifampin, Isoniazid, Ethambutol, Pyrazinamide)", "medical monitoring"],
+                "HEPATITIS B": ["Antiviral medications (Tenofovir, Entecavir)", "liver monitoring", "supportive therapy"],
+                "YELLOW FEVER": ["Supportive care (fluids, pain relievers, rest)", "seek immediate medical attention", "preventable by vaccination"],
+                "MENINGITIS": ["Antibiotics for bacterial meningitis", "antiviral treatment for viral meningitis", "corticosteroids to reduce inflammation"],
+                "MEASLES": ["Supportive care (fluids, fever reducers, vitamin A supplements)", "preventable by vaccination"],
+                "HIV/AIDS": ["Antiretroviral therapy (ART) to manage the virus and prevent complications", "regular medical follow-up"]
+            },
+            "symptom_related_questions": {
+                "high fever": ["Does your fever come and go in cycles?", "Do you have chills before the fever starts?", "Have you been in a malaria-endemic area recently?"],
+                "fever": ["How long have you had the fever?", "Is it constant or does it come and go?", "Have you traveled recently to tropical areas?"],
+                "jaundice": ["Have you noticed yellowing of your eyes or skin?", "Have you had any changes in urine color?", "Do you have any pain in your abdomen?"],
+                "rash": ["Where is the rash located on your body?", "Is the rash itchy or painful?", "Did the rash appear after taking any medication?"],
+                "diarrhea": ["How severe is the diarrhea?", "Is there any blood in your stool?", "Have you been drinking clean water?"],
+                "cough": ["Is it a productive cough with sputum?", "How long have you been coughing?", "Have you coughed up any blood?"],
+                "abdominal pain": ["Where exactly is the pain located?", "Is the pain constant or does it come and go?", "Does it get worse after eating?"],
+                "headache": ["Is the headache severe?", "Does it get worse when you move?", "Do you have any sensitivity to light?"],
+                "stiff neck": ["Can you touch your chin to your chest?", "Do you have a severe headache with the stiff neck?", "Do you have fever along with the stiff neck?"]
+            },
+            "diseases": {}
+        }
 
     def extract_symptoms(self, user_input):
         """Extract symptoms from user input"""
