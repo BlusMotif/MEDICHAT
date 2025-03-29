@@ -223,11 +223,11 @@ class DoctorChatbot:
             
             # Add confidence indicator based on percentage
             if confidence >= 75:
-                confidence_level = "High match"
+                confidence_level = "High Sickness"
             elif confidence >= 50:
-                confidence_level = "Moderate match"
+                confidence_level = "Moderate Sickness"
             else:
-                confidence_level = "Possible match"
+                confidence_level = "Possible Sickness"
             
             response += f"• **{condition}** - {confidence_level}\n"
             
@@ -258,7 +258,7 @@ class DoctorChatbot:
                 remaining_slots = 2 - len(top_conditions)
                 for condition_info in external_data["conditions"][:remaining_slots]:
                     # External sources typically have less confidence since they aren't tailored to African diseases
-                    response += f"• **{condition_info['name']}** - Possible match\n"
+                    response += f"• **{condition_info['name']}** - Possible Sickness\n"
                     if condition_info.get('description'):
                         response += f"  {condition_info['description']}\n"
                     if condition_info.get('source'):
