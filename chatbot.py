@@ -58,7 +58,14 @@ class DoctorChatbot:
             "Have you taken any medications for these symptoms?",
             "Do you have any known allergies or medical conditions?",
             "Have you had any fever or chills?",
-            "Has anyone around you experienced similar symptoms?"
+            "Has anyone around you experienced similar symptoms?",
+            "Have you traveled to any tropical or subtropical regions recently?",
+            "Have you noticed any pattern to your fever, like coming and going every few days?",
+            "Have you been exposed to mosquitoes or other insects recently?",
+            "Is anyone else in your household or community experiencing similar symptoms?",
+            "Have you had any vaccinations for tropical diseases like yellow fever or typhoid?",
+            "Do you have access to clean drinking water?",
+            "Have you been near any stagnant water sources recently?"
         ]
         
         # Disclaimer messages
@@ -77,26 +84,32 @@ class DoctorChatbot:
                 # Use sample data
                 medical_data = {
                     "symptoms": {
-                        "headache": ["Tension headache", "Migraine", "Sinusitis", "Dehydration", "Eye strain"],
-                        "fever": ["Common cold", "Flu", "COVID-19", "Infection", "Inflammation"],
-                        "cough": ["Common cold", "Bronchitis", "Asthma", "COVID-19", "Allergies"],
+                        "headache": ["Tension headache", "Migraine", "Sinusitis", "Dehydration", "Eye strain", "Malaria", "Typhoid Fever"],
+                        "fever": ["Common cold", "Flu", "COVID-19", "Infection", "Inflammation", "Malaria", "Typhoid Fever", "Yellow Fever"],
+                        "cough": ["Common cold", "Bronchitis", "Asthma", "COVID-19", "Allergies", "Tuberculosis"],
                         "sore throat": ["Strep throat", "Common cold", "Tonsillitis", "Allergies", "Acid reflux"],
                         "runny nose": ["Common cold", "Allergies", "Sinusitis", "Flu"],
-                        "fatigue": ["Anemia", "Depression", "Sleep disorder", "Thyroid issues", "Infection"],
-                        "nausea": ["Food poisoning", "Stomach flu", "Migraine", "Pregnancy", "Motion sickness"],
-                        "dizziness": ["Low blood pressure", "Inner ear issues", "Anemia", "Dehydration", "Anxiety"],
-                        "chest pain": ["Heartburn", "Anxiety", "Muscle strain", "Asthma", "Heart issues"],
-                        "shortness of breath": ["Asthma", "Anxiety", "COVID-19", "Heart issues", "Pneumonia"],
+                        "fatigue": ["Anemia", "Depression", "Sleep disorder", "Thyroid issues", "Infection", "Malaria", "Typhoid Fever"],
+                        "nausea": ["Food poisoning", "Stomach flu", "Migraine", "Pregnancy", "Motion sickness", "Malaria", "Typhoid Fever"],
+                        "dizziness": ["Low blood pressure", "Inner ear issues", "Anemia", "Dehydration", "Anxiety", "Malaria"],
+                        "chest pain": ["Heartburn", "Anxiety", "Muscle strain", "Asthma", "Heart issues", "Tuberculosis"],
+                        "shortness of breath": ["Asthma", "Anxiety", "COVID-19", "Heart issues", "Pneumonia", "Tuberculosis"],
                         "back pain": ["Muscle strain", "Herniated disc", "Arthritis", "Kidney infection", "Poor posture"],
-                        "abdominal pain": ["Gastritis", "Food poisoning", "Irritable bowel syndrome", "Appendicitis", "Menstrual cramps"],
-                        "diarrhea": ["Food poisoning", "Irritable bowel syndrome", "Infection", "Food intolerance", "Medication side effect"],
+                        "abdominal pain": ["Gastritis", "Food poisoning", "Irritable bowel syndrome", "Appendicitis", "Menstrual cramps", "Typhoid Fever"],
+                        "diarrhea": ["Food poisoning", "Irritable bowel syndrome", "Infection", "Food intolerance", "Medication side effect", "Typhoid Fever", "Cholera"],
                         "constipation": ["Dehydration", "Low fiber diet", "Medication side effect", "Irritable bowel syndrome", "Thyroid issues"],
-                        "rash": ["Allergic reaction", "Eczema", "Psoriasis", "Contact dermatitis", "Fungal infection"],
-                        "joint pain": ["Arthritis", "Injury", "Gout", "Lupus", "Bursitis"],
-                        "vomiting": ["Food poisoning", "Stomach flu", "Migraine", "Pregnancy", "Motion sickness"],
-                        "muscle pain": ["Strain", "Overuse", "Fibromyalgia", "Infection", "Medication side effect"],
+                        "rash": ["Allergic reaction", "Eczema", "Psoriasis", "Contact dermatitis", "Fungal infection", "Typhoid Fever"],
+                        "joint pain": ["Arthritis", "Injury", "Gout", "Lupus", "Bursitis", "Malaria", "Dengue Fever"],
+                        "vomiting": ["Food poisoning", "Stomach flu", "Migraine", "Pregnancy", "Motion sickness", "Malaria", "Typhoid Fever"],
+                        "muscle pain": ["Strain", "Overuse", "Fibromyalgia", "Infection", "Medication side effect", "Malaria", "Dengue Fever"],
                         "ear pain": ["Ear infection", "Sinus infection", "Tooth infection", "Temporomandibular joint disorder", "Water in ear"],
-                        "eye pain": ["Conjunctivitis", "Dry eye", "Foreign object", "Glaucoma", "Migraine"]
+                        "eye pain": ["Conjunctivitis", "Dry eye", "Foreign object", "Glaucoma", "Migraine"],
+                        "high fever": ["Malaria", "Typhoid Fever", "Yellow Fever", "Dengue Fever"],
+                        "intermittent fever": ["Malaria", "Tuberculosis"],
+                        "chills": ["Malaria", "Flu", "Infection", "Typhoid Fever"],
+                        "sweating": ["Malaria", "Infection", "Anxiety", "Thyroid issues"],
+                        "jaundice": ["Malaria", "Hepatitis", "Liver disease"],
+                        "weakness": ["Malaria", "Typhoid Fever", "Anemia", "Dehydration"]
                     },
                     "conditions": {
                         "Common cold": ["rest", "fluids", "over-the-counter pain relievers", "decongestants"],
@@ -108,13 +121,25 @@ class DoctorChatbot:
                         "Tension headache": ["stress management", "pain relievers", "rest", "massage"],
                         "Asthma": ["inhalers", "avoid triggers", "breathing exercises", "medical follow-up"],
                         "Food poisoning": ["hydration", "bland diet", "rest", "probiotics"],
-                        "Irritable bowel syndrome": ["dietary changes", "stress management", "fiber supplements", "medications"]
+                        "Irritable bowel syndrome": ["dietary changes", "stress management", "fiber supplements", "medications"],
+                        "Malaria": ["antimalarial medication", "rest", "fluids", "fever reducers", "immediate medical attention"],
+                        "Typhoid Fever": ["antibiotics", "rest", "fluids", "fever reducers", "seek medical care immediately"],
+                        "Yellow Fever": ["rest", "fluids", "pain relievers", "seek immediate medical attention", "no specific treatment available"],
+                        "Cholera": ["oral rehydration therapy", "antibiotics", "zinc supplements", "immediate medical care"],
+                        "Tuberculosis": ["antibiotics for 6-9 months", "rest", "proper nutrition", "medical follow-up"],
+                        "Dengue Fever": ["rest", "fluids", "pain relievers (avoid aspirin)", "seek medical care if symptoms worsen"]
                     },
                     "symptom_related_questions": {
                         "headache": ["Is the headache on one side or both?", "Is it pulsating or a constant pressure?", "Does light or noise make it worse?"],
-                        "fever": ["What's your temperature?", "Do you have chills or sweating?", "How long have you had the fever?"],
-                        "cough": ["Is it a dry cough or producing mucus?", "When did it start?", "Is it worse at night?"],
-                        "abdominal pain": ["Where exactly is the pain?", "Is it sharp or dull?", "Does it come and go or is it constant?"]
+                        "fever": ["What's your temperature?", "Do you have chills or sweating?", "How long have you had the fever?", "Does the fever come and go in cycles?"],
+                        "cough": ["Is it a dry cough or producing mucus?", "When did it start?", "Is it worse at night?", "Have you coughed up any blood?"],
+                        "abdominal pain": ["Where exactly is the pain?", "Is it sharp or dull?", "Does it come and go or is it constant?", "Is the pain worse after eating?"],
+                        "high fever": ["Does your fever spike and then go away, only to return later?", "Is the fever accompanied by severe sweating?", "How high does your temperature get?"],
+                        "intermittent fever": ["Do you notice a pattern to when the fever occurs?", "How long do the fever episodes last?", "Do you get chills before the fever starts?"],
+                        "jaundice": ["Have you noticed yellowing of your eyes?", "Has anyone mentioned that your skin looks yellow?", "Have you had any changes in urine color?"],
+                        "weakness": ["Is the weakness constant or does it come and go?", "Can you still perform your normal daily activities?", "Does rest improve the weakness?"],
+                        "chills": ["Do the chills occur before a fever?", "How severe are the chills?", "Do they come in regular patterns?"],
+                        "diarrhea": ["How many times per day?", "Is there blood or mucus in the stool?", "Is it watery or more formed?"]
                     }
                 }
                 return medical_data

@@ -182,7 +182,13 @@ class PDFMedicalProcessor:
             "gastritis", "ulcer", "colitis", "hepatitis", "nephritis",
             "dermatitis", "eczema", "psoriasis", "anemia", "leukemia",
             "cancer", "tumor", "fracture", "sprain", "strain",
-            "concussion", "epilepsy", "stroke", "heart attack", "heart failure"
+            "concussion", "epilepsy", "stroke", "heart attack", "heart failure",
+            # Add common African diseases
+            "malaria", "typhoid fever", "typhoid", "cholera", "yellow fever",
+            "tuberculosis", "tb", "hiv/aids", "aids", "ebola", "dengue fever",
+            "schistosomiasis", "bilharzia", "trypanosomiasis", "sleeping sickness",
+            "meningitis", "leishmaniasis", "filariasis", "river blindness",
+            "guinea worm", "dracunculiasis", "trachoma"
         ]
         
         # Check if any known condition is in the title
@@ -209,7 +215,14 @@ class PDFMedicalProcessor:
             "dizziness", "weakness", "numbness", "tingling", "shortness of breath",
             "chest pain", "abdominal pain", "back pain", "joint pain", "muscle pain",
             "sore throat", "runny nose", "congestion", "sneezing", "sweating",
-            "chills", "insomnia", "loss of appetite", "weight loss", "weight gain"
+            "chills", "insomnia", "loss of appetite", "weight loss", "weight gain",
+            # Symptoms specific to common African diseases
+            "high fever", "intermittent fever", "cyclic fever", "recurrent fever", 
+            "night sweats", "shivering", "rigors", "jaundice", "enlarged spleen",
+            "enlarged liver", "splenomegaly", "hepatomegaly", "anemia", "malaise",
+            "bloody diarrhea", "bloody stool", "dehydration", "confusion",
+            "night sweats", "persistent cough", "coughing up blood", "hemoptysis",
+            "skin rash", "rose spots", "abdominal tenderness", "body aches", "myalgia"
         ]
         
         found_symptoms = []
@@ -230,7 +243,14 @@ class PDFMedicalProcessor:
             "dizziness", "weakness", "numbness", "tingling", "shortness of breath",
             "chest pain", "abdominal pain", "back pain", "joint pain", "muscle pain",
             "sore throat", "runny nose", "congestion", "sneezing", "sweating",
-            "chills", "insomnia", "loss of appetite", "weight loss", "weight gain"
+            "chills", "insomnia", "loss of appetite", "weight loss", "weight gain",
+            # Symptoms specific to common African diseases
+            "high fever", "intermittent fever", "cyclic fever", "recurrent fever", 
+            "night sweats", "shivering", "rigors", "jaundice", "enlarged spleen",
+            "enlarged liver", "splenomegaly", "hepatomegaly", "anemia", "malaise",
+            "bloody diarrhea", "bloody stool", "dehydration", "confusion",
+            "night sweats", "persistent cough", "coughing up blood", "hemoptysis",
+            "skin rash", "rose spots", "abdominal tenderness", "body aches", "myalgia"
         ]
         
         # Common conditions to look for
@@ -241,7 +261,13 @@ class PDFMedicalProcessor:
             "hypertension", "hypotension", "anemia", "diabetes", 
             "hypothyroidism", "hyperthyroidism", "arthritis", "osteoporosis",
             "asthma", "copd", "emphysema", "allergies", "eczema", 
-            "psoriasis", "dermatitis", "anxiety", "depression", "insomnia"
+            "psoriasis", "dermatitis", "anxiety", "depression", "insomnia",
+            # African common diseases
+            "malaria", "typhoid fever", "typhoid", "yellow fever", "cholera",
+            "tuberculosis", "tb", "hiv", "aids", "ebola", "dengue fever",
+            "schistosomiasis", "bilharzia", "trypanosomiasis", "sleeping sickness",
+            "meningitis", "hepatitis", "leishmaniasis", "kala-azar", "filariasis",
+            "river blindness", "onchocerciasis", "guinea worm", "dracunculiasis"
         ]
         
         # Find paragraphs that contain both symptoms and conditions
