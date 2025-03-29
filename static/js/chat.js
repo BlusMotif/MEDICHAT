@@ -8,10 +8,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetChatButton = document.getElementById('resetChat');
     const toggleDarkModeButton = document.getElementById('toggleDarkMode');
     
+    // Apply animation order to symptom buttons for staggered appearance
+    quickSymptomButtons.forEach((button, index) => {
+        button.style.setProperty('--animation-order', index);
+    });
+    
     // Show welcome modal on first visit
     if (!localStorage.getItem('welcomed')) {
         const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
-        welcomeModal.show();
+        setTimeout(() => welcomeModal.show(), 800); // Delay modal to let page animations finish
         localStorage.setItem('welcomed', 'true');
     }
     
@@ -72,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Add a message to the chat
+    // Add a message to the chat with enhanced animations
     function addMessage(message, sender) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}-message mb-3`;
@@ -94,6 +99,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
         } else {
+            // For bot messages, we can add a slight delay to make it feel more natural
+            // and to let the typing indicator show for a more realistic time
+            messageDiv.style.animationDelay = `${Math.min(message.length / 50, 1)}s`;
+            
             messageDiv.innerHTML = `
                 <div class="d-flex align-items-start">
                     <div class="message-avatar me-2">
@@ -107,6 +116,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
+            
+            // If the message is long, add a progressive reveal animation
+            if (message.length > 100) {
+                const textElement = messageDiv.querySelector('.message-text');
+                textElement.style.opacity = '0';
+                
+                // Progressive text reveal
+                setTimeout(() => {
+                    textElement.style.transition = 'opacity 0.5s ease-out';
+                    textElement.style.opacity = '1';
+                }, 100);
+            }
         }
         
         chatMessages.appendChild(messageDiv);
@@ -158,9 +179,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
     
-    // Scroll chat to the bottom
+    // Scroll chat to the bottom with smooth animation
     function scrollToBottom() {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        chatMessages.scrollTo({
+            top: chatMessages.scrollHeight,
+            behavior: 'smooth'
+        });
     }
     
     // Send message to backend
