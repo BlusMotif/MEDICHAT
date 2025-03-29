@@ -1,11 +1,10 @@
-import json
 import os
 import logging
-from typing import Dict, List, Optional
-
+from pathlib import Path
 from text_processor import MedicalTextProcessor
+from chatbot import DoctorChatbot
 
-# Configure logging
+# Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -13,51 +12,38 @@ def process_medical_text():
     """
     Process medical data from text file and integrate with medical knowledge base
     """
-    # Ensure directories exist
-    os.makedirs('static/data', exist_ok=True)
-    
-    # Set file paths
-    text_file_path = 'resources/medical_data/Common_Diseases_Symptoms_Treatment.txt'
-    if not os.path.exists(text_file_path):
-        text_file_path = 'attached_assets/Common_Diseases_Symptoms_Treatment.txt'
-    
-    output_json_path = 'static/data/medical_data.json'
-    
-    # Process the text file
     try:
+        # Path to the text file
+        text_file_path = os.path.join("attached_assets", "Common_Diseases_Symptoms_Treatment.txt")
+        
+        # Create processor and process the text file
         processor = MedicalTextProcessor(text_file_path)
         disease_data = processor.process_text_file()
         
-        # Convert to the format expected by the chatbot
-        medical_data = {"conditions": []}
+        # Create directories if they don't exist
+        os.makedirs(os.path.join("static", "data"), exist_ok=True)
         
-        for disease_name, disease_info in disease_data.items():
-            condition = {
-                "name": disease_name,
-                "symptoms": disease_info.get("symptoms", []),
-                "treatment": disease_info.get("treatment", "Please consult a healthcare provider for treatment options."),
-                "description": disease_info.get("description", ""),
-                "confidence": 0.8  # Default confidence value
-            }
-            medical_data["conditions"].append(condition)
+        # Save directly to medical_data.json (not to a separate file)
+        medical_data_path = os.path.join("static", "data", "medical_data.json")
+        with open(medical_data_path, 'w', encoding='utf-8') as file:
+            import json
+            json.dump(disease_data, file, indent=4)
         
-        # Save the processed data
-        with open(output_json_path, 'w') as f:
-            json.dump(medical_data, f, indent=2)
-        
-        logger.info(f"Processed {len(medical_data['conditions'])} diseases from text file")
+        logger.info(f"Processed {len(disease_data['diseases'])} diseases from text file")
         logger.info(f"Saved medical data directly to medical_data.json")
         
-        # Save regional specific data (for backward compatibility)
-        regional_output_path = 'static/data/regional_diseases.json'
-        processor.save_to_json(regional_output_path)
+        # Also save to regional_diseases.json for backup
+        regional_data_path = os.path.join("static", "data", "regional_diseases.json")
+        processor.save_to_json(regional_data_path)
         
-        return medical_data
-    
+        return True
+        
     except Exception as e:
         logger.error(f"Error processing medical text: {str(e)}")
-        # Return an empty dataset as fallback
-        return {"conditions": []}
+        return False
+
+# Main function for processing medical data
+# This function is called during application startup
 
 if __name__ == "__main__":
     process_medical_text()

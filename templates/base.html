@@ -3,243 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Medi Chat{% endblock %}</title>
-    <!-- Bootstrap CSS -->
+    <title>{% if title %}{{ title }} - {% endif %}Medi Chat</title>
+    
+    <!-- Bootstrap CSS from Replit theme -->
     <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <!-- Custom CSS -->
-    <style>
-        /* Animation for elements appearing */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Animation for chat bubbles */
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        /* Animation for buttons */
-        @keyframes pulseButton {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-        
-        .slide-in {
-            animation: slideIn 0.3s ease-out forwards;
-        }
-        
-        .pulse-animation:hover {
-            animation: pulseButton 0.5s ease-in-out;
-        }
-        
-        /* Override Bootstrap styles for better visibility */
-        .chat-container {
-            height: 70vh;
-            overflow-y: auto;
-            border-radius: 10px;
-            background-color: var(--bs-dark);
-            border: 1px solid var(--bs-gray-700);
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .user-message {
-            background-color: var(--bs-primary);
-            color: white;
-            border-radius: 18px 18px 0 18px;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            max-width: 80%;
-            margin-left: auto;
-            animation: slideIn 0.3s ease-out forwards;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        
-        .bot-message {
-            background-color: var(--bs-secondary);
-            color: white;
-            border-radius: 18px 18px 18px 0;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-            max-width: 80%;
-            animation: slideIn 0.3s ease-out forwards;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        
-        .message-time {
-            font-size: 0.7rem;
-            color: var(--bs-gray-400);
-            text-align: right;
-            margin-top: 5px;
-        }
-        
-        /* Navbar and layout styles */
-        .navbar-brand {
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-        
-        /* Footer */
-        .footer {
-            margin-top: 30px;
-            padding: 20px 0;
-            background-color: var(--bs-dark);
-            color: var(--bs-gray-300);
-        }
-        
-        /* Auth pages styles */
-        .auth-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-        
-        .auth-card {
-            background-color: rgba(var(--bs-dark-rgb), 0.9);
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-        
-        .auth-image-container {
-            position: relative;
-            border-radius: 15px 0 0 15px;
-            overflow: hidden;
-            background-color: var(--bs-primary);
-        }
-        
-        .auth-image {
-            opacity: 0.7;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .auth-image-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.7) 0%, rgba(var(--bs-dark-rgb), 0.8) 100%);
-        }
-        
-        .auth-form {
-            padding: 30px;
-        }
-        
-        /* Typing indicator animation */
-        .typing-indicator {
-            display: inline-flex;
-            align-items: center;
-        }
-        
-        .typing-indicator span {
-            height: 8px;
-            width: 8px;
-            margin: 0 2px;
-            background-color: white;
-            border-radius: 50%;
-            display: inline-block;
-            opacity: 0.4;
-        }
-        
-        .typing-indicator span:nth-child(1) {
-            animation: bounce 1s infinite 0.1s;
-        }
-        
-        .typing-indicator span:nth-child(2) {
-            animation: bounce 1s infinite 0.3s;
-        }
-        
-        .typing-indicator span:nth-child(3) {
-            animation: bounce 1s infinite 0.5s;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-    </style>
-    {% block styles %}{% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand pulse-animation" href="{{ url_for('index') }}">
-                Medi Chat
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('index') }}">Home</a>
-                    </li>
+    <div class="container-fluid vh-100 d-flex flex-column">
+        <!-- Header -->
+        <header class="row py-3 border-bottom">
+            <div class="col-12 d-flex align-items-center">
+                <i class="fas fa-user-md text-primary fs-3 me-2"></i>
+                <h1 class="h4 mb-0">Medi Chat</h1>
+                <div class="ms-auto d-flex align-items-center">
                     {% if current_user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                    </li>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-primary dropdown-toggle me-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-1"></i> {{ current_user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url_for('profile') }}">My Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                            </ul>
+                        </div>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
-                    </li>
+                        <a href="{{ url_for('login') }}" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                        <a href="{{ url_for('register') }}" class="btn btn-sm btn-primary me-2">
+                            <i class="fas fa-user-plus me-1"></i> Register
+                        </a>
                     {% endif %}
-                </ul>
+                    
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="menuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="menuButton">
+                            <li><button class="dropdown-item" id="resetChat">New Conversation</button></li>
+                            <li><button class="dropdown-item" id="toggleDarkMode">Toggle Theme</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#disclaimerModal">Medical Disclaimer</button></li>
+                            {% if current_user.is_authenticated and current_user.is_admin %}
+                                <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#adminModal">Admin Panel</button></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
-    </nav>
-
-    <div class="container">
+        </header>
+        
+        <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
+                <div class="flash-messages p-2">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show mb-2" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
         
+        <!-- Main Content -->
         {% block content %}{% endblock %}
     </div>
     
-    <footer class="footer mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Medi Chat</h5>
-                    <p>Your personal medical assistant powered by advanced medical knowledge and natural language processing.</p>
+    <!-- Medical Disclaimer Modal -->
+    <div class="modal fade" id="disclaimerModal" tabindex="-1" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="disclaimerModalLabel">Medical Disclaimer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <h5>Medical Disclaimer</h5>
-                    <p>The information provided by Medi Chat is for educational purposes only and is not intended to be a substitute for professional medical advice, diagnosis, or treatment.</p>
+                <div class="modal-body">
+                    <p class="fw-bold">Not Professional Medical Advice</p>
+                    <p>The information provided by this chatbot is for general informational and educational purposes only. It is not intended to be a substitute for professional medical advice, diagnosis, or treatment.</p>
+                    
+                    <p class="fw-bold">Consult Healthcare Professionals</p>
+                    <p>Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read or heard from this chatbot.</p>
+                    
+                    <p class="fw-bold">Emergency Situations</p>
+                    <p>If you think you may have a medical emergency, call your doctor or emergency services immediately.</p>
+                    
+                    <p class="fw-bold">No Doctor-Patient Relationship</p>
+                    <p>Use of this chatbot does not establish a doctor-patient relationship.</p>
                 </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col text-center">
-                    <p class="mb-0">&copy; 2025 Medi Chat. All rights reserved.</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">I Understand</button>
                 </div>
             </div>
         </div>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Page-specific scripts -->
     {% block scripts %}{% endblock %}
 </body>
 </html>

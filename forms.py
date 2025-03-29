@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
-
 from models import User
 
 class LoginForm(FlaskForm):
@@ -10,6 +9,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
+
 
 class RegistrationForm(FlaskForm):
     """Form for user registration"""
@@ -36,18 +36,20 @@ class RegistrationForm(FlaskForm):
         """Validate username is unique"""
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
-            raise ValidationError('Username already in use. Please choose a different one.')
+            raise ValidationError('Username already taken. Please choose a different one.')
     
     def validate_email(self, email):
         """Validate email is unique"""
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
-            raise ValidationError('Email address already registered. Please use a different one.')
+            raise ValidationError('Email already registered. Please use a different email or login.')
+
 
 class ResetPasswordRequestForm(FlaskForm):
     """Form for requesting password reset"""
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Reset Password')
+
 
 class ResetPasswordForm(FlaskForm):
     """Form for resetting password after verification"""

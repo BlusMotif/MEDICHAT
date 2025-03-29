@@ -1,9 +1,11 @@
+import os
 from datetime import datetime
-
 from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app import db
+# Initialize SQLAlchemy without a specific app
+db = SQLAlchemy()
 
 class User(UserMixin, db.Model):
     """User model for authentication"""
@@ -25,6 +27,7 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
+
 class MedicalHistory(db.Model):
     """Model to store user's medical chat history"""
     id = db.Column(db.Integer, primary_key=True)
@@ -32,6 +35,7 @@ class MedicalHistory(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     conversation_data = db.Column(db.JSON, nullable=False)
     
+    # Relationship with User model
     user = db.relationship('User', backref=db.backref('medical_history', lazy=True))
     
     def __repr__(self):
