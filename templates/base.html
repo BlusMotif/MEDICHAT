@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if title %}{{ title }} - {% endif %}Medi Chat</title>
+    
+    <!-- Bootstrap CSS from Replit theme -->
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container-fluid vh-100 d-flex flex-column">
+        <!-- Header -->
+        <header class="row py-3 border-bottom">
+            <div class="col-12 d-flex align-items-center">
+                <i class="fas fa-user-md text-primary fs-3 me-2"></i>
+                <h1 class="h4 mb-0">Medi Chat</h1>
+                <div class="ms-auto d-flex align-items-center">
+                    {% if current_user.is_authenticated %}
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-primary dropdown-toggle me-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-1"></i> {{ current_user.username }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url_for('profile') }}">My Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                        <a href="{{ url_for('register') }}" class="btn btn-sm btn-primary me-2">
+                            <i class="fas fa-user-plus me-1"></i> Register
+                        </a>
+                    {% endif %}
+                    
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="menuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="menuButton">
+                            <li><button class="dropdown-item" id="resetChat">New Conversation</button></li>
+                            <li><button class="dropdown-item" id="toggleDarkMode">Toggle Theme</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#disclaimerModal">Medical Disclaimer</button></li>
+                            {% if current_user.is_authenticated and current_user.is_admin %}
+                                <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#adminModal">Admin Panel</button></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages p-2">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show mb-2" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Main Content -->
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Medical Disclaimer Modal -->
+    <div class="modal fade" id="disclaimerModal" tabindex="-1" aria-labelledby="disclaimerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="disclaimerModalLabel">Medical Disclaimer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="fw-bold">Not Professional Medical Advice</p>
+                    <p>The information provided by this chatbot is for general informational and educational purposes only. It is not intended to be a substitute for professional medical advice, diagnosis, or treatment.</p>
+                    
+                    <p class="fw-bold">Consult Healthcare Professionals</p>
+                    <p>Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read or heard from this chatbot.</p>
+                    
+                    <p class="fw-bold">Emergency Situations</p>
+                    <p>If you think you may have a medical emergency, call your doctor or emergency services immediately.</p>
+                    
+                    <p class="fw-bold">No Doctor-Patient Relationship</p>
+                    <p>Use of this chatbot does not establish a doctor-patient relationship.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">I Understand</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Page-specific scripts -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

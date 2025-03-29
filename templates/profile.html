@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-user-circle me-2"></i> My Profile
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar-large bg-primary bg-opacity-10 rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3">
+                            <i class="fas fa-user-md fs-1 text-primary"></i>
+                        </div>
+                        <h4 class="fw-bold">{{ current_user.username }}</h4>
+                        <p class="text-muted">{{ current_user.email }}</p>
+                    </div>
+                    
+                    <div class="border-top pt-3">
+                        <p class="mb-2">
+                            <i class="fas fa-calendar-alt me-2 text-primary"></i> 
+                            Joined: {{ current_user.created_at.strftime('%B %d, %Y') }}
+                        </p>
+                        
+                        <p class="mb-2">
+                            <i class="fas fa-comment-medical me-2 text-primary"></i>
+                            Total Consultations: <span class="fw-bold">{{ history|length }}</span>
+                        </p>
+                        
+                        {% if current_user.is_admin %}
+                        <div class="alert alert-info mt-3 mb-0">
+                            <i class="fas fa-shield-alt me-2"></i>
+                            <strong>Admin Account</strong>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary w-100">
+                        <i class="fas fa-comment-medical me-2"></i> New Consultation
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-history me-2"></i> Medical Consultation History
+                    </h3>
+                </div>
+                <div class="card-body p-0">
+                    {% if history %}
+                        <div class="list-group list-group-flush">
+                            {% for entry in history %}
+                                <div class="list-group-item p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="fw-bold mb-0 text-primary">
+                                            <i class="fas fa-calendar me-2"></i>
+                                            {{ entry.timestamp.strftime('%B %d, %Y') }}
+                                        </h6>
+                                        <span class="badge bg-secondary rounded-pill">
+                                            {{ entry.timestamp.strftime('%I:%M %p') }}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="history-entry">
+                                        <div class="user-message mb-2">
+                                            <div class="d-flex">
+                                                <div class="avatar bg-light rounded-circle me-2 d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-user text-primary"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <div class="bg-primary text-white p-2 rounded-3">
+                                                        {{ entry.conversation_data.user_message }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bot-message">
+                                            <div class="d-flex">
+                                                <div class="avatar bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-user-md text-white"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <div class="bg-secondary bg-opacity-10 p-2 rounded-3">
+                                                        {{ entry.conversation_data.bot_response|safe }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="p-4 text-center">
+                            <div class="py-4">
+                                <i class="fas fa-comment-slash fs-1 text-secondary mb-3"></i>
+                                <h5>No consultation history yet</h5>
+                                <p class="text-muted">Your medical consultations will appear here.</p>
+                                <a href="{{ url_for('index') }}" class="btn btn-primary mt-2">
+                                    Start a Consultation
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate history entries with a staggered effect
+        const historyEntries = document.querySelectorAll('.list-group-item');
+        
+        historyEntries.forEach((entry, index) => {
+            entry.style.opacity = '0';
+            entry.style.transform = 'translateY(20px)';
+            entry.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            entry.style.transitionDelay = `${index * 0.1}s`;
+            
+            setTimeout(() => {
+                entry.style.opacity = '1';
+                entry.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    });
+</script>
+{% endblock %}

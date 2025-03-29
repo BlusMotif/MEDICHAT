@@ -1,10 +1,14 @@
 import os
 import logging
 import threading
-from flask import Flask, render_template, request, jsonify
+from datetime import datetime
+from flask import Flask, render_template, request, jsonify, flash, redirect, url_for
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from chatbot import DoctorChatbot
 from text_processor import AfricanDiseaseTextProcessor
 from process_african_diseases import process_african_diseases
+from models import db, User, MedicalHistory
+from forms import LoginForm, RegistrationForm, ResetPasswordRequestForm, ResetPasswordForm
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -14,11 +18,111 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "default_secret_key")
 
+# Configure database
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_recycle": 300,
+    "pool_pre_ping": True,
+}
+
+# Initialize database with the app
+db.init_app(app)
+
+# Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message = 'Please log in to access this page.'
+login_manager.login_message_category = 'info'
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Load user from database using user_id"""
+    return User.query.get(int(user_id))
+
+# Create database tables if they don't exist
+with app.app_context():
+    db.create_all()
+    
+    # Create admin user if it doesn't exist
+    admin_exists = User.query.filter_by(username='admin').first()
+    if not admin_exists:
+        admin = User(username='admin', email='admin@example.com', is_admin=True)
+        admin.set_password('adminpassword')
+        db.session.add(admin)
+        db.session.commit()
+        logger.info("Admin user created successfully")
+
 # Initialize chatbot
 chatbot = DoctorChatbot()
 
-# Routes and endpoints
+# Authentication routes
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Handle user login"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+        
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password', 'danger')
+            return redirect(url_for('login'))
+            
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        
+        # Safely handle the next page redirect - make sure it's relative to our app
+        if not next_page or next_page.startswith('//') or '://' in next_page:
+            next_page = url_for('index')
+            
+        flash(f'Welcome back, {user.username}!', 'success')
+        return redirect(next_page)
+        
+    return render_template('login.html', title='Sign In', form=form)
 
+
+@app.route('/logout')
+def logout():
+    """Handle user logout"""
+    logout_user()
+    flash('You have been logged out', 'info')
+    return redirect(url_for('index'))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    """Handle user registration"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+        
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        
+        db.session.add(user)
+        db.session.commit()
+        
+        flash('Registration successful! You can now log in', 'success')
+        return redirect(url_for('login'))
+        
+    return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    """Display user profile"""
+    # Fetch user's medical history
+    history = MedicalHistory.query.filter_by(user_id=current_user.id).order_by(MedicalHistory.timestamp.desc()).all()
+    return render_template('profile.html', title='Profile', history=history)
+
+
+# Main routes
 @app.route('/')
 def index():
     """Render the main page"""
@@ -34,6 +138,24 @@ def get_response():
         # Allow empty messages (for initial greeting)
         response = chatbot.process_input(user_message)
         logger.debug(f"Generated response: {response}")
+        
+        # If user is authenticated, save this conversation to their history
+        if current_user.is_authenticated:
+            # Save chat history
+            conversation_data = {
+                "user_message": user_message,
+                "bot_response": response,
+                "timestamp": datetime.utcnow().isoformat()
+            }
+            
+            history_entry = MedicalHistory(
+                user_id=current_user.id,
+                conversation_data=conversation_data
+            )
+            
+            db.session.add(history_entry)
+            db.session.commit()
+            logger.debug(f"Saved chat history for user {current_user.username}")
         
         return jsonify({"response": response})
     
