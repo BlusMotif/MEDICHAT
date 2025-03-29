@@ -13,19 +13,22 @@ from nltk.stem import WordNetLemmatizer
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+# Download NLTK resources if not already present
+try:
+    nltk.data.find('tokenizers/punkt')
+    nltk.data.find('corpora/stopwords')
+    nltk.data.find('corpora/wordnet')
+    nltk.data.find('tokenizers/punkt_tab')
+except LookupError:
+    nltk.download('punkt')
+    nltk.download('stopwords')
+    nltk.download('wordnet')
+    nltk.download('punkt_tab')
+    logger.info("Downloaded required NLTK resources")
+
 class DoctorChatbot:
     def __init__(self):
         """Initialize the Doctor Chatbot with necessary resources"""
-        # Download NLTK resources if not already present
-        try:
-            nltk.data.find('tokenizers/punkt')
-            nltk.data.find('corpora/stopwords')
-            nltk.data.find('corpora/wordnet')
-        except LookupError:
-            nltk.download('punkt')
-            nltk.download('stopwords')
-            nltk.download('wordnet')
-            logger.info("Downloaded required NLTK resources")
 
         self.lemmatizer = WordNetLemmatizer()
         self.stop_words = set(stopwords.words('english'))

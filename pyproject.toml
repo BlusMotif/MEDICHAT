@@ -11,4 +11,5 @@ dependencies = [
     "gunicorn>=23.0.0",
     "nltk>=3.9.1",
     "psycopg2-binary>=2.9.10",
+    "pypdf2>=3.0.1",
 ]

@@ -1,217 +1,210 @@
-// Doctor Chatbot - Main JavaScript File
-
-// DOM Elements
-const chatMessages = document.getElementById('chatMessages');
-const messageForm = document.getElementById('messageForm');
-const userInput = document.getElementById('userInput');
-const typingIndicator = document.getElementById('typingIndicator');
-const resetChatButton = document.getElementById('resetChat');
-const toggleDarkModeButton = document.getElementById('toggleDarkMode');
-const quickSymptomButtons = document.querySelectorAll('.quick-symptom');
-const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
-
-// Show welcome modal on first visit
-if (!localStorage.getItem('doctorBotWelcomeSeen')) {
-    setTimeout(() => {
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const chatMessages = document.getElementById('chatMessages');
+    const messageForm = document.getElementById('messageForm');
+    const userInput = document.getElementById('userInput');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const quickSymptomButtons = document.querySelectorAll('.quick-symptom');
+    const resetChatButton = document.getElementById('resetChat');
+    const toggleDarkModeButton = document.getElementById('toggleDarkMode');
+    
+    // Show welcome modal on first visit
+    if (!localStorage.getItem('welcomed')) {
+        const welcomeModal = new bootstrap.Modal(document.getElementById('welcomeModal'));
         welcomeModal.show();
-        localStorage.setItem('doctorBotWelcomeSeen', 'true');
-    }, 1000);
-}
-
-// Toggle dark/light mode
-toggleDarkModeButton.addEventListener('click', () => {
-    const html = document.documentElement;
-    if (html.getAttribute('data-bs-theme') === 'dark') {
-        html.setAttribute('data-bs-theme', 'light');
-        localStorage.setItem('doctorBotTheme', 'light');
-    } else {
-        html.setAttribute('data-bs-theme', 'dark');
-        localStorage.setItem('doctorBotTheme', 'dark');
+        localStorage.setItem('welcomed', 'true');
     }
-});
-
-// Apply saved theme preference
-const savedTheme = localStorage.getItem('doctorBotTheme');
-if (savedTheme) {
-    document.documentElement.setAttribute('data-bs-theme', savedTheme);
-}
-
-// Initialize the chat with a greeting
-document.addEventListener('DOMContentLoaded', () => {
-    // Add quick symptom button functionality
+    
+    // Send initial empty message to get greeting
+    sendMessage('');
+    
+    // Form submission
+    messageForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const message = userInput.value.trim();
+        if (message) {
+            addMessage(message, 'user');
+            sendMessage(message);
+            userInput.value = '';
+        }
+    });
+    
+    // Quick symptom buttons
     quickSymptomButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            userInput.value = button.textContent;
-            messageForm.dispatchEvent(new Event('submit'));
+        button.addEventListener('click', function() {
+            const symptom = this.textContent;
+            addMessage('I have ' + symptom.toLowerCase(), 'user');
+            sendMessage('I have ' + symptom.toLowerCase());
         });
     });
     
-    // Request initial greeting from the bot
-    fetchBotResponse('');
-});
-
-// Reset chat
-resetChatButton.addEventListener('click', () => {
-    // Clear chat messages
-    chatMessages.innerHTML = `
-        <div class="d-flex justify-content-center my-4">
-            <div class="alert alert-info text-center">
-                <i class="fas fa-info-circle me-2"></i>
-                This chatbot provides general information only and is not a substitute for professional medical advice.
+    // Reset chat
+    resetChatButton.addEventListener('click', function() {
+        // Clear the chat UI
+        while (chatMessages.firstChild) {
+            chatMessages.removeChild(chatMessages.firstChild);
+        }
+        
+        // Add disclaimer
+        chatMessages.innerHTML = `
+            <div class="d-flex justify-content-center my-4">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>
+                    This chatbot provides general information only and is not a substitute for professional medical advice.
+                </div>
             </div>
-        </div>
-    `;
+        `;
+        
+        // Send empty message to get greeting
+        sendMessage('restart');
+    });
     
-    // Fetch new greeting
-    fetchBotResponse('restart');
-});
-
-// Form submission handler
-messageForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+    // Toggle dark mode
+    toggleDarkModeButton.addEventListener('click', function() {
+        const html = document.documentElement;
+        if (html.getAttribute('data-bs-theme') === 'dark') {
+            html.setAttribute('data-bs-theme', 'light');
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.setAttribute('data-bs-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        }
+    });
     
-    const message = userInput.value.trim();
-    if (!message) return;
+    // Add a message to the chat
+    function addMessage(message, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message mb-3`;
+        
+        const time = getFormattedTime();
+        
+        if (sender === 'user') {
+            messageDiv.innerHTML = `
+                <div class="d-flex align-items-start justify-content-end">
+                    <div class="message-content bg-primary text-white p-3 rounded-3">
+                        <div class="message-text">${message}</div>
+                        <div class="message-time text-end opacity-75 small">${time}</div>
+                    </div>
+                    <div class="message-avatar ms-2">
+                        <div class="avatar bg-light rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="d-flex align-items-start">
+                    <div class="message-avatar me-2">
+                        <div class="avatar bg-primary rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="fas fa-user-md text-white"></i>
+                        </div>
+                    </div>
+                    <div class="message-content bg-light p-3 rounded-3">
+                        <div class="message-text">${formatBotMessage(message)}</div>
+                        <div class="message-time opacity-75 small">${time}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
     
-    // Add user message to chat
-    addMessage(message, 'user');
-    
-    // Clear input
-    userInput.value = '';
+    // Format bot message with markdown-like syntax
+    function formatBotMessage(message) {
+        // Replace newlines with <br>
+        let formatted = message.replace(/\n/g, '<br>');
+        
+        // Format bullet points
+        formatted = formatted.replace(/•\s(.*?)(?=<br>|$)/g, '<li>$1</li>');
+        
+        // Wrap consecutive list items in ul
+        if (formatted.includes('<li>')) {
+            formatted = formatted.replace(/(<li>.*?<\/li>)+/g, '<ul>$&</ul>');
+        }
+        
+        // Bold text
+        formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        
+        // Italics
+        formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        
+        return formatted;
+    }
     
     // Show typing indicator
-    showTypingIndicator();
-    
-    // Fetch bot response
-    fetchBotResponse(message);
-});
-
-/**
- * Add a message to the chat
- * @param {string} message - The message text
- * @param {string} sender - 'user' or 'bot'
- */
-function addMessage(message, sender) {
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('message', `${sender}-message`);
-    
-    // Format the message - convert newlines to <br> and handle bullet points
-    let formattedMessage = message;
-    
-    // For bot messages, add proper formatting
-    if (sender === 'bot') {
-        // Replace bullet points with proper HTML
-        formattedMessage = formattedMessage.replace(/•\s(.*?)(?=(\n•|\n\n|$))/g, '<li>$1</li>');
-        if (formattedMessage.includes('<li>')) {
-            formattedMessage = formattedMessage.replace(/(<li>.*?<\/li>)/gs, '<ul>$1</ul>');
-        }
-        
-        // Replace newlines with breaks
-        formattedMessage = formattedMessage.replace(/\n\n/g, '</p><p>');
-        formattedMessage = `<p>${formattedMessage}</p>`;
-        
-        // Highlight important warnings
-        formattedMessage = formattedMessage.replace(/IMPORTANT:/g, '<strong>IMPORTANT:</strong>');
-    } else {
-        // Simple newline replacement for user messages
-        formattedMessage = formattedMessage.replace(/\n/g, '<br>');
+    function showTypingIndicator() {
+        typingIndicator.classList.remove('d-none');
+        scrollToBottom();
     }
     
-    messageElement.innerHTML = formattedMessage;
+    // Hide typing indicator
+    function hideTypingIndicator() {
+        typingIndicator.classList.add('d-none');
+    }
     
-    // Add timestamp
-    const timestamp = document.createElement('span');
-    timestamp.classList.add('timestamp');
-    timestamp.textContent = getFormattedTime();
-    messageElement.appendChild(timestamp);
+    // Get formatted time string
+    function getFormattedTime() {
+        const now = new Date();
+        return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
     
-    chatMessages.appendChild(messageElement);
+    // Scroll chat to the bottom
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
     
-    // Scroll to bottom
-    scrollToBottom();
-}
-
-/**
- * Show typing indicator
- */
-function showTypingIndicator() {
-    typingIndicator.classList.remove('d-none');
-}
-
-/**
- * Hide typing indicator
- */
-function hideTypingIndicator() {
-    typingIndicator.classList.add('d-none');
-}
-
-/**
- * Get formatted time string
- * @returns {string} Time in format HH:MM
- */
-function getFormattedTime() {
-    const now = new Date();
-    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
-
-/**
- * Scroll chat to the bottom
- */
-function scrollToBottom() {
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-/**
- * Fetch response from the bot
- * @param {string} message - The user's message
- */
-function fetchBotResponse(message) {
-    // If it's an empty message, it's the initial greeting
-    const endpoint = '/get_response';
-    
-    fetch(endpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: message }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Add delay to simulate typing
-        const typingDelay = Math.min(1000, data.response.length * 10);
+    // Send message to backend
+    function sendMessage(message) {
+        // Show typing indicator
+        showTypingIndicator();
         
-        setTimeout(() => {
+        // Disable input while waiting for response
+        userInput.disabled = true;
+        
+        // Send request to backend
+        fetch('/get_response', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Hide typing indicator
             hideTypingIndicator();
-            addMessage(data.response, 'bot');
-        }, typingDelay);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        hideTypingIndicator();
-        addMessage('Sorry, I encountered an error while processing your request. Please try again.', 'bot');
-    });
-}
-
-// Make user input autofocus when user starts typing
-document.addEventListener('keydown', (e) => {
-    // Ignore if we're in an input already
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-        return;
+            
+            // Enable input
+            userInput.disabled = false;
+            userInput.focus();
+            
+            // Add response to chat
+            if (data.response) {
+                addMessage(data.response, 'bot');
+            } else if (data.error) {
+                addMessage('Sorry, I encountered an error: ' + data.error, 'bot');
+            }
+        })
+        .catch(error => {
+            // Hide typing indicator
+            hideTypingIndicator();
+            
+            // Enable input
+            userInput.disabled = false;
+            
+            // Add error message
+            addMessage('Sorry, I encountered a technical issue. Please try again.', 'bot');
+            console.error('Error fetching response:', error);
+        });
     }
     
-    // Ignore special keys
-    if (e.ctrlKey || e.altKey || e.metaKey) {
-        return;
-    }
-    
-    // Focus the input if user types a letter or number
-    if (e.key.length === 1) {
-        userInput.focus();
+    // Initialize theme from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
     }
 });

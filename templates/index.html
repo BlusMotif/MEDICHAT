@@ -32,6 +32,7 @@
                             <li><button class="dropdown-item" id="toggleDarkMode">Toggle Theme</button></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#disclaimerModal">Medical Disclaimer</button></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#adminModal">Admin Panel</button></li>
                         </ul>
                     </div>
                 </div>
@@ -139,10 +140,78 @@
         </div>
     </div>
 
+    <!-- Admin Panel Modal -->
+    <div class="modal fade" id="adminModal" tabindex="-1" aria-labelledby="adminModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="adminModalLabel">Admin Panel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Medical Knowledge Base</h6>
+                    <p>Process medical PDFs to enhance the chatbot's knowledge base.</p>
+                    
+                    <div class="mb-3">
+                        <button id="processPdfsBtn" class="btn btn-primary">
+                            Process Medical PDFs
+                        </button>
+                    </div>
+                    
+                    <div id="pdfProcessingStatus" class="d-none">
+                        <div class="alert alert-info">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="spinner-border spinner-border-sm me-2" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <span>Processing medical PDFs...</span>
+                            </div>
+                            <div class="progress">
+                                <div id="pdfProgressBar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                                    role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" 
+                                    style="width: 0%">0%</div>
+                            </div>
+                            <div class="mt-2 small">
+                                <span id="pdfStatusText">Initializing...</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="pdfProcessingComplete" class="d-none">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Medical PDF processing complete! The chatbot's knowledge base has been enhanced.
+                        </div>
+                    </div>
+                    
+                    <div id="pdfProcessingError" class="d-none">
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="pdfErrorMessage">An error occurred during PDF processing.</span>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h6>Current Knowledge Base</h6>
+                    <p>The chatbot currently understands:</p>
+                    <ul>
+                        <li>Symptoms: <span id="symptomCount">...</span></li>
+                        <li>Medical Conditions: <span id="conditionCount">...</span></li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 </body>
 </html>
