@@ -57,10 +57,7 @@
 - **Diagnosis**: HIV rapid test, ELISA test, CD4 count.
 - **Treatment**: Antiretroviral therapy (ART) to manage the virus and prevent complications.
 
-## 12. EBOLA VIRUS DISEASE
-- **Symptoms**: High fever, severe headache, muscle pain, vomiting, diarrhea, internal and external bleeding.
-- **Diagnosis**: PCR test for Ebola virus.
-- **Treatment**: Supportive care, rehydration therapy, experimental monoclonal antibody treatments.
+
 
 ## 13. SCHISTOSOMIASIS (BILHARZIA)
 - **Symptoms**: Bloody urine, abdominal pain, enlarged liver and spleen, itchy skin rash.
