@@ -155,27 +155,15 @@ class DoctorChatbot:
         }
 
     def extract_symptoms(self, user_input):
-        """Extract symptoms from user input"""
-        # Tokenize and lemmatize input
-        words = word_tokenize(user_input.lower())
-        lemmatized_words = [self.lemmatizer.lemmatize(word) for word in words if word not in self.stop_words]
-
+        """Extract symptoms from user input - exact matches only"""
         # Extract matched symptoms
-        potential_symptoms = []
+        exact_symptoms = []
         for symptom in self.medical_data["symptoms"].keys():
-            # Check for exact matches
+            # Only check for exact matches
             if symptom in user_input.lower():
-                potential_symptoms.append(symptom)
-                continue
+                exact_symptoms.append(symptom)
 
-            # Check for partial matches with compound symptoms (e.g., "sore throat")
-            symptom_parts = symptom.split()
-            if len(symptom_parts) > 1:
-                match_count = sum(1 for part in symptom_parts if part in user_input.lower())
-                if match_count / len(symptom_parts) >= 0.5:  # At least half the words match
-                    potential_symptoms.append(symptom)
-
-        return potential_symptoms
+        return exact_symptoms
 
     def get_follow_up_question(self):
         """Get a follow-up question based on collected symptoms"""
@@ -329,11 +317,10 @@ class DoctorChatbot:
                 symptom_count = len(self.conversation_state["confirmed_symptoms"])
                 if symptom_count >= 4:
                     self.conversation_state["stage"] = "diagnosis"
-                    return f"I've identified these symptoms: {symptoms_text}. Based on the {symptom_count} symptoms you've shared, here's my assessment: {self.get_diagnosis()}"
+                    return f"Based on your mentioned symptoms: {symptoms_text}, here's my assessment: {self.get_diagnosis()}"
                 else:
                     remaining = 4 - symptom_count
-                    remaining_text = f"I need {remaining} more {('symptom' if remaining == 1 else 'symptoms')} to provide an accurate diagnosis. " if remaining > 0 else ""
-                    return f"I see you're experiencing {symptoms_text}. {remaining_text}{follow_up} Please mention at least {remaining} more specific symptoms you're experiencing to get an accurate diagnosis."
+                    return f"I've noted your symptoms: {symptoms_text}. I need at least {remaining} more specific {('symptom' if remaining == 1 else 'symptoms')} to provide an accurate diagnosis. Please describe any other symptoms you're experiencing."
 
             # Check if user wants a diagnosis with the symptoms collected so far
             if re.search(r'\b(diagnose|diagnosis|what do i have|what is it)\b', user_input.lower()):
