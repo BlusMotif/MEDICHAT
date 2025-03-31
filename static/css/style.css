@@ -147,6 +147,39 @@ header h1:hover::after {
 /* Higher contrast for light mode */
 [data-bs-theme="light"] .text-dark {
     color: #000 !important;
+
+/* Responsive styling for quick symptoms */
+.quick-symptoms-container {
+    max-height: 120px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+@media (max-width: 768px) {
+    .quick-symptoms-container {
+        max-height: 100px;
+    }
+    
+    .quick-symptom {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+}
+
+/* Scrollbar styling for quick symptoms container */
+.quick-symptoms-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.quick-symptoms-container::-webkit-scrollbar-thumb {
+    background-color: var(--bs-secondary);
+    border-radius: 2px;
+}
+
 }
 
 [data-bs-theme="light"] .bg-secondary.bg-opacity-10 {
