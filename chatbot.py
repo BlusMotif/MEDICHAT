@@ -3,6 +3,7 @@ import re
 import os
 import logging
 import random
+from datetime import datetime
 from pathlib import Path
 import nltk
 from nltk.tokenize import word_tokenize
@@ -286,7 +287,19 @@ class DoctorChatbot:
 
     def process_input(self, user_input):
         """Process user input and return appropriate response"""
-        # Handle greetings
+        # Handle basic salutations
+        greetings = ["hello", "hi", "hey", "good morning", "good afternoon", "good evening"]
+        if any(greeting in user_input.lower() for greeting in greetings):
+            time_of_day = datetime.now().hour
+            if time_of_day < 12:
+                greeting = "Good morning"
+            elif time_of_day < 17:
+                greeting = "Good afternoon"
+            else:
+                greeting = "Good evening"
+            return f"{greeting}! I'm Medi Chat, your virtual medical assistant. How can I help you today?"
+
+        # Handle initial greeting stage
         if self.conversation_state["stage"] == "greeting":
             self.conversation_state["stage"] = "collecting_symptoms"
             return random.choice(self.greetings)
