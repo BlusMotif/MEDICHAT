@@ -119,18 +119,6 @@
             "diagnosis": "HIV rapid test, ELISA test, CD4 count.",
             "treatment": "Antiretroviral therapy (ART) to manage the virus and prevent complications."
         },
-        "EBOLA VIRUS DISEASE": {
-            "symptoms": [
-                "High fever",
-                "severe headache",
-                "muscle pain",
-                "vomiting",
-                "diarrhea",
-                "internal and external bleeding"
-            ],
-            "diagnosis": "PCR test for Ebola virus.",
-            "treatment": "Supportive care, rehydration therapy, experimental monoclonal antibody treatments."
-        },
         "SCHISTOSOMIASIS (BILHARZIA)": {
             "symptoms": [
                 "Bloody urine",
@@ -511,7 +499,6 @@
         "high fever": [
             "MALARIA",
             "MEASLES",
-            "EBOLA VIRUS DISEASE",
             "DENGUE FEVER"
         ],
         "chills": [
@@ -538,8 +525,7 @@
         ],
         "muscle pain": [
             "MALARIA",
-            "YELLOW FEVER",
-            "EBOLA VIRUS DISEASE"
+            "YELLOW FEVER"
         ],
         "fatigue": [
             "MALARIA",
@@ -585,7 +571,6 @@
         "vomiting": [
             "CHOLERA",
             "YELLOW FEVER",
-            "EBOLA VIRUS DISEASE",
             "GASTROENTERITIS",
             "APPENDICITIS"
         ],
@@ -668,7 +653,6 @@
         ],
         "severe headache": [
             "MENINGITIS",
-            "EBOLA VIRUS DISEASE",
             "STROKE"
         ],
         "sensitivity to light": [
@@ -704,13 +688,6 @@
         ],
         "skin rashes": [
             "HIV/AIDS"
-        ],
-        "diarrhea": [
-            "EBOLA VIRUS DISEASE",
-            "GASTROENTERITIS"
-        ],
-        "internal and external bleeding": [
-            "EBOLA VIRUS DISEASE"
         ],
         "bloody urine": [
             "SCHISTOSOMIASIS (BILHARZIA)"
@@ -840,6 +817,9 @@
         ],
         "unexplained weight loss": [
             "DIABETES MELLITUS"
+        ],
+        "diarrhea": [
+            "GASTROENTERITIS"
         ],
         "stomach cramps": [
             "GASTROENTERITIS"
@@ -992,7 +972,6 @@
         "MENINGITIS": "Lumbar puncture (spinal tap), blood tests, CT scan.",
         "MEASLES": "Clinical observation, blood test for measles IgM antibodies.",
         "HIV/AIDS": "HIV rapid test, ELISA test, CD4 count.",
-        "EBOLA VIRUS DISEASE": "PCR test for Ebola virus.",
         "SCHISTOSOMIASIS (BILHARZIA)": "Urine or stool microscopy, blood test.",
         "ONCHOCERCIASIS (RIVER BLINDNESS)": "Skin snip test, blood test.",
         "LEPROSY": "Skin biopsy, clinical examination.",
@@ -1042,7 +1021,6 @@
         "MENINGITIS": "Antibiotics for bacterial meningitis, antiviral treatment for viral meningitis, corticosteroids to reduce inflammation.",
         "MEASLES": "Supportive care (fluids, fever reducers, vitamin A supplements). Preventable by vaccination.",
         "HIV/AIDS": "Antiretroviral therapy (ART) to manage the virus and prevent complications.",
-        "EBOLA VIRUS DISEASE": "Supportive care, rehydration therapy, experimental monoclonal antibody treatments.",
         "SCHISTOSOMIASIS (BILHARZIA)": "Praziquantel (antiparasitic medication).",
         "ONCHOCERCIASIS (RIVER BLINDNESS)": "Ivermectin (antiparasitic drug), doxycycline for secondary infections.",
         "LEPROSY": "Multi-drug therapy (MDT) with Rifampin, Dapsone, and Clofazimine.",
