@@ -52,9 +52,9 @@ class DoctorChatbot:
         
         # Greeting messages
         self.greetings = [
-            "Hello! I'm Medi Chat, a virtual assistant that can help identify potential health issues based on your symptoms. I need at least 3 symptoms to provide an accurate diagnosis, so please share all symptoms you're experiencing.",
-            "Hi there! I'm Medi Chat, your virtual medical assistant. I require a minimum of 3 symptoms to give you an accurate assessment. Please describe at least 3 symptoms you're experiencing in detail.",
-            "Welcome! I'm Medi Chat, here to assist with preliminary medical advice. For an accurate assessment, I need you to share at least 3 symptoms you're having today. Please provide as much detail as possible."
+            "👋 Hello! I'm Medi Chat, your friendly medical assistant. I'm here to help identify potential health issues. Please share at least 3 symptoms you're experiencing for an accurate assessment.",
+            "🏥 Greetings! I'm Medi Chat, your dedicated health companion. To assist you better, I'll need at least 3 symptoms. How are you feeling today?",
+            "💉 Welcome to Medi Chat! I'm your virtual health advisor. For the best diagnosis, please tell me about 3 or more symptoms you're experiencing."
         ]
         
         # Follow-up questions
