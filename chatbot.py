@@ -35,13 +35,13 @@ class DoctorChatbot:
 
         self.lemmatizer = WordNetLemmatizer()
         self.stop_words = set(stopwords.words('english'))
-        
+
         # Initialize medical API for external references
         self.medical_api = MedicalResourceAPI()
-        
+
         # Load medical data
         self.medical_data = self.load_medical_data()
-        
+
         # Track conversation state
         self.conversation_state = {
             "collected_symptoms": set(),
@@ -49,14 +49,14 @@ class DoctorChatbot:
             "stage": "greeting",  # greeting, collecting_symptoms, diagnosis, follow_up
             "current_question": None
         }
-        
+
         # Greeting messages
         self.greetings = [
             "👋 Hello! I'm Medi Chat, your friendly medical assistant. I'm here to help identify potential health issues. Please share at least 3 symptoms you're experiencing for an accurate assessment.",
             "🏥 Greetings! I'm Medi Chat, your dedicated health companion. To assist you better, I'll need at least 3 symptoms. How are you feeling today?",
             "💉 Welcome to Medi Chat! I'm your virtual health advisor. For the best diagnosis, please tell me about 3 or more symptoms you're experiencing."
         ]
-        
+
         # Follow-up questions
         self.follow_up_questions = [
             "How long have you been experiencing these symptoms?",
@@ -73,7 +73,7 @@ class DoctorChatbot:
             "Do you have access to clean drinking water?",
             "Have you been near any stagnant water sources recently?"
         ]
-        
+
         # Disclaimer messages
         self.disclaimer = (
             "IMPORTANT: This is only a preliminary assessment based on the symptoms you've described. "
@@ -86,10 +86,10 @@ class DoctorChatbot:
             # Force processing of the medical text file
             logger.info("Processing medical text file directly.")
             from process_medical_data import process_medical_text
-            
+
             # Process medical text
             success = process_medical_text()
-            
+
             if success:
                 # Try to load the medical_data.json file that was just created
                 data_path = os.path.join("static", "data", "medical_data.json")
@@ -98,16 +98,16 @@ class DoctorChatbot:
                         medical_data = json.load(file)
                         logger.info(f"Successfully loaded medical data from {data_path}")
                         return medical_data
-            
+
             # If processing failed or file doesn't exist, fall back to basic data
             logger.warning("Using basic medical data as fallback.")
             return self._get_basic_medical_data()
-            
+
         except Exception as e:
             logger.error(f"Error loading medical data: {str(e)}")
             # Return a basic dataset focused on common diseases
             return self._get_basic_medical_data()
-            
+
     def _get_basic_medical_data(self):
         """Return a basic dataset focused on common diseases"""
         return {
@@ -159,7 +159,7 @@ class DoctorChatbot:
         # Tokenize and lemmatize input
         words = word_tokenize(user_input.lower())
         lemmatized_words = [self.lemmatizer.lemmatize(word) for word in words if word not in self.stop_words]
-        
+
         # Extract matched symptoms
         potential_symptoms = []
         for symptom in self.medical_data["symptoms"].keys():
@@ -167,14 +167,14 @@ class DoctorChatbot:
             if symptom in user_input.lower():
                 potential_symptoms.append(symptom)
                 continue
-                
+
             # Check for partial matches with compound symptoms (e.g., "sore throat")
             symptom_parts = symptom.split()
             if len(symptom_parts) > 1:
                 match_count = sum(1 for part in symptom_parts if part in user_input.lower())
                 if match_count / len(symptom_parts) >= 0.5:  # At least half the words match
                     potential_symptoms.append(symptom)
-                    
+
         return potential_symptoms
 
     def get_follow_up_question(self):
@@ -184,7 +184,7 @@ class DoctorChatbot:
             if symptom in self.medical_data.get("symptom_related_questions", {}):
                 questions = self.medical_data["symptom_related_questions"][symptom]
                 return random.choice(questions)
-        
+
         # Otherwise use general follow-up questions
         return random.choice(self.follow_up_questions)
 
@@ -192,7 +192,7 @@ class DoctorChatbot:
         """Generate a diagnosis based on confirmed symptoms"""
         if not self.conversation_state["confirmed_symptoms"]:
             return "I need more information about your symptoms to provide a helpful assessment."
-            
+
         # Check if we have at least 3 symptoms
         symptom_count = len(self.conversation_state["confirmed_symptoms"])
         if symptom_count < 3:
@@ -201,36 +201,36 @@ class DoctorChatbot:
             # Update the conversation state back to collecting symptoms
             self.conversation_state["stage"] = "collecting_symptoms"
             return f"I need at least 3 symptoms to provide an accurate diagnosis. Please share {remaining} more {symptom_word} you're experiencing."
-        
+
         # Find conditions that match the symptoms in our local database
         potential_conditions = {}
-        
+
         for symptom in self.conversation_state["confirmed_symptoms"]:
             if symptom in self.medical_data["symptoms"]:
                 conditions = self.medical_data["symptoms"][symptom]
                 for condition in conditions:
                     potential_conditions[condition] = potential_conditions.get(condition, 0) + 1
-        
+
         # Sort conditions by frequency and strength of match
         sorted_conditions = sorted(potential_conditions.items(), key=lambda x: x[1], reverse=True)
-        
+
         if not sorted_conditions:
             return "Based on the symptoms you've described, I don't have enough information to suggest a potential cause. Please consult with a healthcare professional."
-        
+
         # Get top 3 conditions from local database
         top_conditions = sorted_conditions[:3]
-        
+
         # Calculate match confidence
         max_score = len(self.conversation_state["confirmed_symptoms"])
-        
+
         # Generate diagnosis response
         response = "Based on the symptoms you've described, here are the most likely conditions:\n\n"
-        
+
         # Display the conditions with their match strength
         for condition, match_count in top_conditions:
             # Calculate confidence percentage based on match count vs total symptoms
             confidence = int((match_count / max_score) * 100) if max_score > 0 else 0
-            
+
             # Add confidence indicator based on percentage
             if confidence >= 75:
                 confidence_level = "High Sickness"
@@ -238,9 +238,9 @@ class DoctorChatbot:
                 confidence_level = "Moderate Sickness"
             else:
                 confidence_level = "Possible Sickness"
-            
+
             response += f"• **{condition}** - {confidence_level}\n"
-            
+
             # Check if treatment info is available in the diseases dictionary (from medical text)
             if "diseases" in self.medical_data and condition in self.medical_data["diseases"]:
                 disease_info = self.medical_data["diseases"][condition]
@@ -253,17 +253,17 @@ class DoctorChatbot:
                 response += "  Possible self-care steps include: " + ", ".join(self.medical_data["conditions"][condition]) + "\n\n"
             else:
                 response += "\n"
-                
+
         # Also check external medical resources for additional information
         try:
             # Convert set to list for API
             symptom_list = list(self.conversation_state["confirmed_symptoms"])
             external_data = self.medical_api.search_medical_condition(symptom_list)
-            
+
             # Only show external conditions if we don't already have 3 from our local database
             if len(top_conditions) < 3 and external_data and external_data.get("conditions"):
                 response += "\nAdditional information from medical references:\n\n"
-                
+
                 # Only get enough conditions to bring our total to 3
                 remaining_slots = 3 - len(top_conditions)
                 for condition_info in external_data["conditions"][:remaining_slots]:
@@ -273,16 +273,16 @@ class DoctorChatbot:
                         response += f"  {condition_info['description']}\n"
                     if condition_info.get('source'):
                         response += f"  Source: {condition_info['source']}\n\n"
-                
+
                 # Add the external API disclaimer if available
                 if external_data.get("disclaimer"):
                     response += f"\n{external_data['disclaimer']}\n"
         except Exception as e:
             logger.error(f"Error getting external medical information: {str(e)}")
             # Continue without external data if there's an error
-        
+
         response += "\n" + self.disclaimer
-        
+
         return response
 
     def process_input(self, user_input):
@@ -304,55 +304,55 @@ class DoctorChatbot:
         if self.conversation_state["stage"] == "greeting":
             self.conversation_state["stage"] = "collecting_symptoms"
             return random.choice(self.greetings)
-        
+
         # Check for conversation ending or restart
         if re.search(r'\b(goodbye|bye|thank you|thanks)\b', user_input.lower()):
             self.reset_conversation()
             return "I'm glad I could help. Remember, this is not a substitute for professional medical advice. Take care and consult a healthcare provider for proper diagnosis and treatment. Type anything to start a new conversation."
-        
+
         # Check for restart request
         if re.search(r'\b(restart|start over|new conversation)\b', user_input.lower()):
             self.reset_conversation()
             return "Let's start over. " + random.choice(self.greetings)
-        
+
         # Collecting symptoms stage
         if self.conversation_state["stage"] == "collecting_symptoms":
             extracted_symptoms = self.extract_symptoms(user_input)
-            
+
             if extracted_symptoms:
                 self.conversation_state["collected_symptoms"].update(extracted_symptoms)
                 self.conversation_state["confirmed_symptoms"].update(extracted_symptoms)
-                
+
                 symptoms_text = ", ".join(extracted_symptoms)
                 follow_up = self.get_follow_up_question()
-                
+
                 symptom_count = len(self.conversation_state["confirmed_symptoms"])
-                if symptom_count >= 3:
+                if symptom_count >= 4:
                     self.conversation_state["stage"] = "diagnosis"
                     return f"I've identified these symptoms: {symptoms_text}. Based on the {symptom_count} symptoms you've shared, here's my assessment: {self.get_diagnosis()}"
                 else:
-                    remaining = 3 - symptom_count
+                    remaining = 4 - symptom_count
                     remaining_text = f"I need {remaining} more {('symptom' if remaining == 1 else 'symptoms')} to provide an accurate diagnosis. " if remaining > 0 else ""
                     return f"I see you're experiencing {symptoms_text}. {remaining_text}{follow_up} Please mention at least {remaining} more specific symptoms you're experiencing to get an accurate diagnosis."
-            
+
             # Check if user wants a diagnosis with the symptoms collected so far
             if re.search(r'\b(diagnose|diagnosis|what do i have|what is it)\b', user_input.lower()):
                 symptom_count = len(self.conversation_state["confirmed_symptoms"])
-                if symptom_count >= 3:
+                if symptom_count >= 4:
                     self.conversation_state["stage"] = "diagnosis"
                     return self.get_diagnosis()
                 else:
-                    remaining = 3 - symptom_count
+                    remaining = 4 - symptom_count
                     symptom_word = "symptoms" if remaining > 1 else "symptom"
-                    return f"I need at least 3 symptoms to provide an accurate diagnosis. You've only shared {symptom_count} symptom(s) so far. Please share {remaining} more {symptom_word} you're experiencing before I can give you a proper assessment."
-            
+                    return f"I need at least 4 symptoms to provide an accurate diagnosis. You've only shared {symptom_count} symptom(s) so far. Please share {remaining} more {symptom_word} you're experiencing before I can give you a proper assessment."
+
             # Check if it's a general question or statement
             if any(word in user_input.lower() for word in ["what", "how", "why", "can", "could", "when", "where"]):
                 return "I'm a medical chatbot designed to help identify potential health issues. To help you better, please share any symptoms you're experiencing."
-                
+
             # For any other type of sentence
             return "I understand you're trying to communicate with me. As a medical assistant, I'm best at helping identify potential health issues based on symptoms. Could you please share any symptoms you're experiencing?"
-        
+
         # Diagnosis stage
         if self.conversation_state["stage"] == "diagnosis":
             # Check if user is adding more symptoms
@@ -360,17 +360,17 @@ class DoctorChatbot:
             if new_symptoms:
                 self.conversation_state["confirmed_symptoms"].update(new_symptoms)
                 symptoms_text = ", ".join(new_symptoms)
-                
+
                 # Ensure we still have at least 3 symptoms for diagnosis
                 symptom_count = len(self.conversation_state["confirmed_symptoms"])
-                if symptom_count >= 3:
+                if symptom_count >= 4:
                     return f"I've added these additional symptoms: {symptoms_text}. " + self.get_diagnosis()
                 else:
                     # If symptoms have been removed or we somehow have fewer than 3
                     self.conversation_state["stage"] = "collecting_symptoms"
-                    remaining = 3 - symptom_count
+                    remaining = 4 - symptom_count
                     return f"I've added these additional symptoms: {symptoms_text}. However, you now have only {symptom_count} confirmed symptom(s). I need at least {remaining} more symptom(s) to provide an accurate diagnosis. Please share more specific symptoms you're experiencing."
-            
+
             # Check if user is asking for more information or clarification
             if re.search(r'\b(more info|more information|tell me more|additional info|explain|clarify)\b', user_input.lower()):
                 # Get potential conditions from symptoms (similar to get_diagnosis)
@@ -380,12 +380,12 @@ class DoctorChatbot:
                         conditions = self.medical_data["symptoms"][symptom]
                         for condition in conditions:
                             potential_conditions[condition] = potential_conditions.get(condition, 0) + 1
-                
+
                 # Try to get information about specific conditions mentioned in user input
                 for condition in potential_conditions.keys():
                     if condition.lower() in user_input.lower():
                         return self.get_treatment_info(condition)
-                
+
                 # Check if user is asking about a specific disease that wasn't in our diagnosis
                 # Common diseases to check for
                 specific_diseases = [
@@ -393,23 +393,23 @@ class DoctorChatbot:
                     "covid", "flu", "influenza", "pneumonia", "bronchitis", "asthma",
                     "diabetes", "hypertension", "cancer", "hiv", "aids"
                 ]
-                
+
                 for disease in specific_diseases:
                     if disease in user_input.lower():
                         return self.get_treatment_info(disease.title())
-                
+
                 return "For more detailed information about these conditions, please consult with a healthcare professional. They can provide personalized advice based on your medical history and a proper examination. " + self.disclaimer
-            
+
             # Default response in diagnosis stage
             return "Based on the symptoms you've shared, I've provided my best assessment. Is there anything specific you'd like to know about these potential conditions? You can also say 'restart' to begin a new consultation."
-        
+
         # Default response if no other condition is met
         return "I'm not sure I understand. Could you please clarify or rephrase your question? You can describe your symptoms or ask for a diagnosis if we've already discussed your symptoms."
 
     def get_treatment_info(self, condition):
         """Get detailed treatment information for a specific condition"""
         response = f"Here's more information about {condition}:\n\n"
-        
+
         # Check for information in the medical diseases data structure
         if "diseases" in self.medical_data and condition in self.medical_data["diseases"]:
             disease_info = self.medical_data["diseases"][condition]
@@ -420,31 +420,31 @@ class DoctorChatbot:
             if "symptoms" in disease_info:
                 symptom_list = ", ".join(disease_info["symptoms"])
                 response += f"Common symptoms: {symptom_list}\n\n"
-        
+
         # Try to get information from our traditional conditions structure if it exists
         elif "conditions" in self.medical_data and condition in self.medical_data["conditions"]:
             response += f"Recommended self-care steps include: {', '.join(self.medical_data['conditions'][condition])}\n\n"
-        
+
         # Try to get additional information from external sources
         try:
             treatment_info = self.medical_api.get_treatment_recommendations(condition)
-            
+
             if treatment_info:
                 if treatment_info.get('treatment'):
                     response += f"Additional treatment information:\n{treatment_info['treatment']}\n\n"
-                
+
                 if treatment_info.get('source'):
                     response += f"Source: {treatment_info['source']}\n"
-                
+
                 if treatment_info.get('disclaimer'):
                     response += f"\n{treatment_info['disclaimer']}\n"
         except Exception as e:
             logger.error(f"Error getting treatment information: {str(e)}")
             # Continue without external data if there's an error
-        
+
         response += "\n" + self.disclaimer
         return response
-    
+
     def reset_conversation(self):
         """Reset the conversation state"""
         self.conversation_state = {
