@@ -157,12 +157,7 @@ header h1:hover::after {
 
 @media (max-width: 768px) {
     .quick-symptoms-container {
-        max-height: 100px;
-    }
-    
-    .quick-symptom {
-        font-size: 0.8rem;
-        padding: 0.25rem 0.5rem;
+        display: none;
     }
     
     .message {
