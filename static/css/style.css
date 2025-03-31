@@ -156,11 +156,6 @@ header h1:hover::after {
 }
 
 @media (max-width: 768px) {
-    .quick-symptoms-container,
-    .quick-symptoms-container + p,
-    .quick-symptoms-container + div {
-        display: none;
-    }
     
     .message {
         max-width: 90%;
