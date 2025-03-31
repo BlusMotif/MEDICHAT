@@ -287,9 +287,10 @@ class DoctorChatbot:
 
     def process_input(self, user_input):
         """Process user input and return appropriate response"""
-        # Handle basic salutations
+        # Handle basic salutations only if they are the sole content
         greetings = ["hello", "hi", "hey", "good morning", "good afternoon", "good evening"]
-        if any(greeting in user_input.lower() for greeting in greetings):
+        user_input_lower = user_input.lower().strip()
+        if any(user_input_lower == greeting for greeting in greetings):
             time_of_day = datetime.now().hour
             if time_of_day < 12:
                 greeting = "Good morning"
