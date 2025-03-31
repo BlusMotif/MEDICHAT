@@ -315,23 +315,23 @@ class DoctorChatbot:
                 follow_up = self.get_follow_up_question()
 
                 symptom_count = len(self.conversation_state["confirmed_symptoms"])
-                if symptom_count >= 3:
+                if symptom_count >= 4:
                     self.conversation_state["stage"] = "diagnosis"
                     return f"Based on your mentioned symptoms: {symptoms_text}, here's my assessment: {self.get_diagnosis()}"
                 else:
-                    remaining = 3 - symptom_count
+                    remaining = 4 - symptom_count
                     return f"I've noted your symptoms: {symptoms_text}. I need at least {remaining} more specific {('symptom' if remaining == 1 else 'symptoms')} to provide an accurate diagnosis. Please describe any other symptoms you're experiencing."
 
             # Check if user wants a diagnosis with the symptoms collected so far
             if re.search(r'\b(diagnose|diagnosis|what do i have|what is it)\b', user_input.lower()):
                 symptom_count = len(self.conversation_state["confirmed_symptoms"])
-                if symptom_count >= 3:
+                if symptom_count >= 4:
                     self.conversation_state["stage"] = "diagnosis"
                     return self.get_diagnosis()
                 else:
-                    remaining = 3 - symptom_count
+                    remaining = 4 - symptom_count
                     symptom_word = "symptoms" if remaining > 1 else "symptom"
-                    return f"I need at least 3 symptoms to provide an accurate diagnosis. You've only shared {symptom_count} symptom(s) so far. Please share {remaining} more {symptom_word} you're experiencing before I can give you a proper assessment."
+                    return f"I need at least 4 symptoms to provide an accurate diagnosis. You've only shared {symptom_count} symptom(s) so far. Please share {remaining} more {symptom_word} you're experiencing before I can give you a proper assessment."
 
             # Check if it's a general question or statement
             if any(word in user_input.lower() for word in ["what", "how", "why", "can", "could", "when", "where"]):
