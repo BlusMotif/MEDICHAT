@@ -345,8 +345,12 @@ class DoctorChatbot:
                     symptom_word = "symptoms" if remaining > 1 else "symptom"
                     return f"I need at least 3 symptoms to provide an accurate diagnosis. You've only shared {symptom_count} symptom(s) so far. Please share {remaining} more {symptom_word} you're experiencing before I can give you a proper assessment."
             
-            # No symptoms detected in the response
-            return "I didn't recognize specific symptoms in your message. Could you please mention your symptoms more clearly? For example: headache, fever, cough, etc."
+            # Check if it's a general question or statement
+            if any(word in user_input.lower() for word in ["what", "how", "why", "can", "could", "when", "where"]):
+                return "I'm a medical chatbot designed to help identify potential health issues. To help you better, please share any symptoms you're experiencing."
+                
+            # For any other type of sentence
+            return "I understand you're trying to communicate with me. As a medical assistant, I'm best at helping identify potential health issues based on symptoms. Could you please share any symptoms you're experiencing?"
         
         # Diagnosis stage
         if self.conversation_state["stage"] == "diagnosis":
