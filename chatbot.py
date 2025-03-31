@@ -217,8 +217,8 @@ class DoctorChatbot:
         if not sorted_conditions:
             return "Based on the symptoms you've described, I don't have enough information to suggest a potential cause. Please consult with a healthcare professional."
         
-        # Get top 2 conditions from local database (limit to 2 as requested)
-        top_conditions = sorted_conditions[:2]
+        # Get top 3 conditions from local database
+        top_conditions = sorted_conditions[:3]
         
         # Calculate match confidence
         max_score = len(self.conversation_state["confirmed_symptoms"])
@@ -260,12 +260,12 @@ class DoctorChatbot:
             symptom_list = list(self.conversation_state["confirmed_symptoms"])
             external_data = self.medical_api.search_medical_condition(symptom_list)
             
-            # Only show external conditions if we don't already have 2 from our local database
-            if len(top_conditions) < 2 and external_data and external_data.get("conditions"):
+            # Only show external conditions if we don't already have 3 from our local database
+            if len(top_conditions) < 3 and external_data and external_data.get("conditions"):
                 response += "\nAdditional information from medical references:\n\n"
                 
-                # Only get enough conditions to bring our total to 2
-                remaining_slots = 2 - len(top_conditions)
+                # Only get enough conditions to bring our total to 3
+                remaining_slots = 3 - len(top_conditions)
                 for condition_info in external_data["conditions"][:remaining_slots]:
                     # External sources typically have less confidence since they aren't tailored to our medical database
                     response += f"• **{condition_info['name']}** - Possible Sickness\n"
