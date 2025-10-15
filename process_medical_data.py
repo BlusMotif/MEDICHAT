@@ -14,7 +14,7 @@ def process_medical_text():
     """
     try:
         # Path to the text file
-        text_file_path = os.path.join("attached_assets", "Common_Diseases_Symptoms_Treatment.txt")
+        text_file_path = os.path.join(os.path.dirname(__file__), "attached_assets", "Common_Diseases_Symptoms_Treatment.txt")
         
         # Create processor and process the text file
         processor = MedicalTextProcessor(text_file_path)

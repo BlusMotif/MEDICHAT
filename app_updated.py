@@ -111,5 +111,4 @@ def get_medical_data_status():
 # Example command: gunicorn -w 4 app:app
 
 if __name__ == '__main__':
-    # app.run(host='0.0.0.0', port=5000, debug=True)  # Removed for production use
-    pass  # Placeholder to avoid running the development server
+    app.run(host='0.0.0.0', port=5000, debug=True)
